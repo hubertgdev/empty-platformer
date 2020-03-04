@@ -1,15 +1,19 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+
+using UnityEngine;
 
 ///<summary>
-/// Represents a Player, with movement and jump controls.
+/// Represents a Player, with movement, jump and shoot controls.
 ///</summary>
 public class Player : MonoBehaviour
 {
 
-    [Header("Settings")]
+    [Header("Movement Settings")]
 
     [SerializeField]
     private float m_Speed = 200f;
+
+    [Header("Jump Settings")]
 
     [SerializeField]
     private float m_JumpForce = 12f;
@@ -18,23 +22,38 @@ public class Player : MonoBehaviour
     private LayerMask m_IsOnFloorDetectionLayer = ~0;
 
     [SerializeField]
-    private float m_IsOnFloorDetectionDefaultOffset = 1.1f;
+    private float m_IsOnFloorDetectionOffset = 1.1f;
+
+    [Header("Shoot Settings")]
+
+    [SerializeField]
+    private float m_ShootCooldown = 0.2f;
+
+    [SerializeField]
+    private float m_ShootRange = 8f;
 
     [Header("References")]
 
     [SerializeField]
     private Rigidbody m_Rigidbody = null;
 
+    // Flow
+
+    private float m_ShootCooldownTimer = 0f;
+
     /// <summary>
     /// Called when the scene is loaded.
     /// </summary>
-    private void Awake()
+    private void Start()
     {
         // Initialize the Rigidbody reference if it's not already set.
         if(m_Rigidbody == null)
         {
             m_Rigidbody = GetComponent<Rigidbody>();
         }
+
+        m_ShootCooldownTimer = m_ShootCooldown;
+        StartCoroutine(UpdateShootCooldown(m_ShootCooldown));
     }
 
     /// <summary>
@@ -44,6 +63,7 @@ public class Player : MonoBehaviour
     {
         CheckMovement();
         CheckJump();
+        CheckShoot();
     }
 
     /// <summary>
@@ -57,6 +77,10 @@ public class Player : MonoBehaviour
         velocity.x = movement * m_Speed * Time.deltaTime;
 
         m_Rigidbody.velocity = velocity;
+        if(velocity.x != 0f)
+        {
+            transform.right = Vector3.right * Mathf.Sign(velocity.x);
+        }
     }
 
     /// <summary>
@@ -64,11 +88,21 @@ public class Player : MonoBehaviour
     /// </summary>
     private void CheckJump()
     {
-        Debug.Log("Is on floor: " + IsOnFloor());
         if(Input.GetButton("Jump") && IsOnFloor())
         {
-            Debug.Log("Ok");
             m_Rigidbody.AddForce(Vector3.up * m_JumpForce, ForceMode.Impulse);
+        }
+    }
+
+    /// <summary>
+    /// Checks shoot input, and do shoot action if required and possible.
+    /// </summary>
+    private void CheckShoot()
+    {
+        if(Input.GetButton("Shoot") && CanShoot())
+        {
+            Debug.DrawLine(transform.position, transform.position + transform.right * m_ShootRange, Color.red, m_ShootCooldown * 6);
+            m_ShootCooldownTimer = 0f;
         }
     }
 
@@ -77,12 +111,20 @@ public class Player : MonoBehaviour
     /// </summary>
     private bool IsOnFloor()
     {
-        float rayDistance = (m_Rigidbody.velocity.y < 0f) ? m_Rigidbody.velocity.y : m_IsOnFloorDetectionDefaultOffset;
-        if(Physics.Raycast(transform.position, Vector3.down, rayDistance, m_IsOnFloorDetectionLayer))
+        if(Physics.Raycast(transform.position, Vector3.down, m_IsOnFloorDetectionOffset, m_IsOnFloorDetectionLayer))
         {
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Checks if the player can shoot.
+    /// In fact, checks if the "shoot timer" is more or equal to "shoot cooldown".
+    /// </summary>
+    private bool CanShoot()
+    {
+        return m_ShootCooldownTimer >= m_ShootCooldown;
     }
 
     /// <summary>
@@ -96,8 +138,24 @@ public class Player : MonoBehaviour
         Rigidbody rb = (m_Rigidbody == null) ? GetComponent<Rigidbody>() : m_Rigidbody;
         if(rb != null)
         {
-            float rayDistance = (rb.velocity.y < 0f) ? rb.velocity.y : m_IsOnFloorDetectionDefaultOffset;
-            Gizmos.DrawLine(transform.position, transform.position + Vector3.down * rayDistance);
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.down * m_IsOnFloorDetectionOffset);
+        }
+    }
+
+    /// <summary>
+    /// Persistent coroutine that updates the shoot timer if needed.
+    /// Use CanShoo() to check if the cooldown is elapsed or not.
+    /// </summary>
+    private IEnumerator UpdateShootCooldown(float _Cooldown)
+    {
+        while(true)
+        {
+            if(m_ShootCooldownTimer < _Cooldown)
+            {
+                m_ShootCooldownTimer += Time.deltaTime;
+            }
+
+            yield return null;
         }
     }
 
