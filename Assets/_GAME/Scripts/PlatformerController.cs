@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+
+using UnityEngine;
 using UnityEngine.Events;
 
 ///<summary>
@@ -9,16 +11,42 @@ public class PlatformerController : MonoBehaviour
 
     #region Properties
 
+    /***** Constants *****/
+
+    // Offset used for Jump obstacles detection (see UpdateJump() method)
+    private const float JUMP_OBSTACLES_DETECTION_OFFSET = 1f;
+
+    /***** Settings *****/
+
     [Header("Movement Settings")]
 
     [SerializeField, Tooltip("Maximum speed of the character")]
     private float m_Speed = 8f;
 
-    [SerializeField, Tooltip("Defines the layers to check when detecting obstacles")]
-    private LayerMask m_ObstaclesDetectionLayer = ~0;
+    [SerializeField, Tooltip("Defines the layers to check when detecting obstacles on movement")]
+    private LayerMask m_MovementObstaclesDetectionLayer = ~0;
 
     [SerializeField, Tooltip("By default, use the Collider on this GameObject")]
     private BoxCollider m_Collider = null;
+
+    [Header("Jump Settings")]
+
+    [SerializeField, Tooltip("The Jump path: X axis represents the duration of the jump, Y axis represents the height")]
+    private AnimationCurve m_JumpCurve = new AnimationCurve();
+
+    [SerializeField, Tooltip("Defines the falling speed of the character")]
+    private float m_GravityScale = 1f;
+
+    [SerializeField, Tooltip("If false, press the Jump button once to run the jump curve completely. If true, the jump curve is read until the Jump button is released or until the curve is complete.")]
+    private bool m_HoldInputMode = true;
+
+    [SerializeField, Tooltip("Used only if \"Hold Input Mode\" is set to true. Defines the minimum jump duration.")]
+    private float m_MinJumpDuration = .2f;
+
+    [SerializeField, Tooltip("Defines the layers to check when detecting obstacles on jump")]
+    private LayerMask m_JumpObstaclesDetectionLayer = ~0;
+
+    /***** Events *****/
 
     [Header("Movement Events")]
 
@@ -38,20 +66,65 @@ public class PlatformerController : MonoBehaviour
     [SerializeField]
     private Vector3Event m_OnChangeOrientation = new Vector3Event();
 
+    [Header("Jump Events")]
+
+    // Called when the player press the Jump button and the Jump action begins to apply
+    [SerializeField]
+    private UnityEvent m_OnBeginJump = new UnityEvent();
+
+    // Called each frame the character is ascending after a Jump
+    [SerializeField]
+    private UnityEvent m_OnUpdateJump = new UnityEvent();
+
+    // Called when the character stops jumping by releasing the Jump button (if Hold Input Mode enabled), by encountering an obstacle above
+    // him, or by completing the Jump curve
+    [SerializeField]
+    private UnityEvent m_OnStopJump = new UnityEvent();
+
+    // Called when the character lands on the floor after falling down
+    [SerializeField]
+    private UnityEvent m_OnLand = new UnityEvent();
+
+    // Called when the character is falling down
+    [SerializeField]
+    private UnityEvent m_OnFall = new UnityEvent();
+
+    /***** Movement properties *****/
+
     // Stores the last orientation of the character to eventually trigger the OnChangeOrientation event if it changes
     private Vector3 m_LastOrientation = Vector3.zero;
 
     // Defines if the player has moved the last frame or not, in order to trigger OnBegin|Update|StopMove events
     private bool m_MovedLastFrame = false;
 
-    // Debug properties
+    /***** Jump properties *****/
+
+    // Defines if the character is currently on the floor. Useful for triggering OnLand event the first frame that character touches the ground
+    private bool m_IsOnFloor = false;
+
+    // The current time (x position) on the Jump curve to read
+    private float m_JumpTime = 0f;
+
+    // The Y position of the character when it begins to jump
+    private float m_JumpInitialYPosition = 0f;
+
+    // Defines the current velocity of the character on the Y axis
+    private float m_YVelocity = 0f;
+
+    // Defines if the character is currently jumping
+    private bool m_IsJumping = false;
+
+    /***** Debug properties *****/
 
     #if UNITY_EDITOR
 
-    // Store the last "cast distance" of the obstacles detection, for drawing gizmos
-    private float m_LastObstaclesDetectionCastDistance = 0f;
+    // Store the last "cast distance" of the movement obstacles detection (on X axis), for drawing gizmos
+    private float m_LastMovementObstaclesDetectionCastDistance = 0f;
 
-    #endif
+    // Store the last "cast distance" of the jump obstacles detection (on Y axis), for drawing gizmos
+    private float m_LastJumpObstaclesDetectionCastDistance = 0f;
+
+#endif
 
     #endregion
 
@@ -64,6 +137,7 @@ public class PlatformerController : MonoBehaviour
     private void Awake()
     {
         if (m_Collider == null) { m_Collider = GetComponent<BoxCollider>(); }
+        m_JumpTime = m_JumpCurve.ComputeDuration();
     }
 
     /// <summary>
@@ -72,6 +146,7 @@ public class PlatformerController : MonoBehaviour
     private void Update()
     {
         CheckMovement(Time.deltaTime);
+        UpdateJump(Time.deltaTime);
     }
 
     #endregion
@@ -115,7 +190,6 @@ public class PlatformerController : MonoBehaviour
             }
 
             // The movement hasn't been applied: return false
-            Debug.Log("Didn't move");
             return false;
         }
 
@@ -134,10 +208,10 @@ public class PlatformerController : MonoBehaviour
 
         float castDistance = m_Speed * Mathf.Abs(_Direction.x) * Time.deltaTime;
         #if UNITY_EDITOR
-        m_LastObstaclesDetectionCastDistance = castDistance;
+        m_LastMovementObstaclesDetectionCastDistance = castDistance;
         #endif
         // If no obstacles hit
-        if (!Physics.BoxCast(transform.position, Extents, transform.right, Quaternion.identity, castDistance, m_ObstaclesDetectionLayer))
+        if (!Physics.BoxCast(transform.position, Extents, transform.right, Quaternion.identity, castDistance, m_MovementObstaclesDetectionLayer))
         {
             // Change target position
             targetPosition = transform.position + _Direction * m_Speed * _DeltaTime;
@@ -150,7 +224,6 @@ public class PlatformerController : MonoBehaviour
         m_OnUpdateMove.Invoke(new MovementInfos { speed = m_Speed, lastPosition = lastPosition, currentPosition = targetPosition });
 
         // The movement has been applied: return true
-        Debug.Log("Moved");
         return true;
     }
 
@@ -176,6 +249,133 @@ public class PlatformerController : MonoBehaviour
             transform.right = orientation;
             m_OnChangeOrientation.Invoke(orientation);
             m_LastOrientation = orientation;
+        }
+    }
+
+    #endregion
+
+
+    #region Jump
+
+    private void UpdateJump(float _DeltaTime)
+    {
+        // If the character is currently jumping
+        if (m_IsJumping)
+        {
+            // Update jump
+            float lastJumpTime = m_JumpTime;
+            m_JumpTime += _DeltaTime;
+
+            float lastHeight = m_JumpCurve.Evaluate(lastJumpTime);
+            float targetHeight = m_JumpCurve.Evaluate(m_JumpTime);
+            float castDistance = (targetHeight - lastHeight);
+            RaycastHit rayHit;
+
+            #if UNITY_EDITOR
+            m_LastJumpObstaclesDetectionCastDistance = castDistance;
+            #endif
+
+            // If there's an obstacle above
+            if (Physics.BoxCast(transform.position, Extents, Vector3.up, out rayHit, Quaternion.identity, castDistance, m_JumpObstaclesDetectionLayer))
+            {
+                // Place player at the maximum height possible, and stop jump
+                Vector3 targetPosition = transform.position;
+                targetPosition.y = m_JumpInitialYPosition + lastHeight + rayHit.distance;
+                transform.position = targetPosition;
+                m_IsJumping = false;
+                m_YVelocity = 0f;
+                m_OnUpdateJump.Invoke();
+                m_OnStopJump.Invoke();
+            }
+            // Else, if there's no obstacle above
+            else
+            {
+                // If the Jump action is finished
+                if(m_JumpTime >= m_JumpCurve.ComputeDuration())
+                {
+                    // Place character at the maximum jump height, and call OnUpdateJump and OnStopJump() events
+                    Vector3 targetPosition = transform.position;
+                    targetPosition.y = m_JumpInitialYPosition + m_JumpCurve.Evaluate(m_JumpCurve.ComputeDuration());
+                    transform.position = targetPosition;
+
+                    m_IsJumping = false;
+                    m_OnUpdateJump.Invoke();
+                    m_OnStopJump.Invoke();
+                }
+                // Else, if the Jump action is not finished, place character to next Y position
+                else
+                {
+                    Vector3 targetPosition = transform.position;
+                    targetPosition.y = m_JumpInitialYPosition + m_JumpCurve.Evaluate(m_JumpTime);
+                    transform.position = targetPosition;
+                    m_OnUpdateJump.Invoke();
+                }
+            }
+        }
+        // Else, if the character is not jumping
+        else
+        {
+            RaycastHit rayHit;
+            float castDistance = Mathf.Abs(m_YVelocity) * _DeltaTime + JUMP_OBSTACLES_DETECTION_OFFSET;
+
+            #if UNITY_EDITOR
+            m_LastJumpObstaclesDetectionCastDistance = -(castDistance - JUMP_OBSTACLES_DETECTION_OFFSET);
+            #endif
+
+            /**
+             * NOTE: An offset is added to start the obstacles detection cast from above the character's real position.
+             * It allow us to deal with float variables accuracy, which can cause the character to pass through the floor because the cast
+             * origin is computed from inside the platform where the character stands.
+             * 
+             * You can try to remove the JUMP_OBSTACLES_DETECTION_OFFSET constant where it's used, the reason for doing it will be obvious!
+             */
+
+            // If character touches something below
+            if (Physics.BoxCast(transform.position + Vector3.up * JUMP_OBSTACLES_DETECTION_OFFSET, Extents, Vector3.down, out rayHit, Quaternion.identity, castDistance, m_JumpObstaclesDetectionLayer))
+            {
+                // If the character wasn't on the floor
+                if(!m_IsOnFloor)
+                {
+                    // Place character on the floor
+                    Vector3 targetPosition = transform.position;
+                    targetPosition.y = rayHit.point.y + Extents.y;
+                    transform.position = targetPosition;
+
+                    // Reset velocity and falling state
+                    m_YVelocity = 0f;
+                    m_IsOnFloor = true;
+
+                    // Call OnLand event
+                    m_OnLand.Invoke();
+                }
+            }
+            // Else, if there's nothing below the character
+            else
+            {
+                // Updates the character position
+                Vector3 targetPosition = transform.position;
+                targetPosition.y += m_YVelocity * _DeltaTime;
+                transform.position = targetPosition;
+
+                m_IsOnFloor = false;
+
+                // Call OnFall event
+                m_OnFall.Invoke();
+
+                // Update velocity (apply gravity)
+                m_YVelocity += Physics.gravity.y * m_GravityScale * _DeltaTime;
+            }
+
+            // If the character is on the floor (and so it can jump) and player is pressing Jump button
+            if (m_IsOnFloor && Input.GetButtonDown("Jump"))
+            {
+                // Begin Jump action
+                m_IsOnFloor = false;
+                m_IsJumping = true;
+                m_JumpTime = 0f;
+                m_JumpInitialYPosition = transform.position.y;
+                m_OnBeginJump.Invoke();
+            }
         }
     }
 
@@ -230,7 +430,11 @@ public class PlatformerController : MonoBehaviour
     {
         // Draw the obstacles detection cast
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(transform.position + Orientation * m_LastObstaclesDetectionCastDistance, Size);
+        Gizmos.DrawWireCube(transform.position + Orientation * m_LastMovementObstaclesDetectionCastDistance, Size);
+
+        // Draw the jump obstacles detection cast
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireCube(transform.position + Vector3.up * m_LastJumpObstaclesDetectionCastDistance, Size);
     }
 
     #endif
