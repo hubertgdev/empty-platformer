@@ -745,7 +745,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_GravityScale: 5
-  m_HoldInputMode: 1
+  m_HoldInputMode: 0
   m_MinJumpDuration: 0.2
   m_JumpObstaclesDetectionLayer:
     serializedVersion: 2

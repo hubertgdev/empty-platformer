@@ -257,11 +257,32 @@ public class PlatformerController : MonoBehaviour
 
     #region Jump
 
+    private void StopJump()
+    {
+        m_IsJumping = false;
+        m_YVelocity = 0f;
+        m_OnUpdateJump.Invoke();
+        m_OnStopJump.Invoke();
+    }
+
     private void UpdateJump(float _DeltaTime)
     {
         // If the character is currently jumping
         if (m_IsJumping)
         {
+            // If Hold Input Mode option is enabled, but the Jump button is released
+            if(m_HoldInputMode && !Input.GetButton("Jump"))
+            {
+                // Ensures the minimum Jump duration is less than the Jump curve duration
+                float minDuration = Mathf.Min(m_MinJumpDuration, m_JumpCurve.ComputeDuration());
+                // If the minimum jump duration has been reached, cancel jump now
+                if (m_JumpTime >= m_MinJumpDuration)
+                {
+                    StopJump();
+                    return;
+                }
+            }
+
             // Update jump
             float lastJumpTime = m_JumpTime;
             m_JumpTime += _DeltaTime;
@@ -269,23 +290,19 @@ public class PlatformerController : MonoBehaviour
             float lastHeight = m_JumpCurve.Evaluate(lastJumpTime);
             float targetHeight = m_JumpCurve.Evaluate(m_JumpTime);
             float castDistance = (targetHeight - lastHeight);
-            RaycastHit rayHit;
 
             #if UNITY_EDITOR
             m_LastJumpObstaclesDetectionCastDistance = castDistance;
             #endif
 
             // If there's an obstacle above
-            if (Physics.BoxCast(transform.position, Extents, Vector3.up, out rayHit, Quaternion.identity, castDistance, m_JumpObstaclesDetectionLayer))
+            if (Physics.BoxCast(transform.position, Extents, Vector3.up, out RaycastHit rayHit, Quaternion.identity, castDistance, m_JumpObstaclesDetectionLayer))
             {
                 // Place player at the maximum height possible, and stop jump
                 Vector3 targetPosition = transform.position;
                 targetPosition.y = m_JumpInitialYPosition + lastHeight + rayHit.distance;
                 transform.position = targetPosition;
-                m_IsJumping = false;
-                m_YVelocity = 0f;
-                m_OnUpdateJump.Invoke();
-                m_OnStopJump.Invoke();
+                StopJump();
             }
             // Else, if there's no obstacle above
             else
@@ -297,10 +314,7 @@ public class PlatformerController : MonoBehaviour
                     Vector3 targetPosition = transform.position;
                     targetPosition.y = m_JumpInitialYPosition + m_JumpCurve.Evaluate(m_JumpCurve.ComputeDuration());
                     transform.position = targetPosition;
-
-                    m_IsJumping = false;
-                    m_OnUpdateJump.Invoke();
-                    m_OnStopJump.Invoke();
+                    StopJump();
                 }
                 // Else, if the Jump action is not finished, place character to next Y position
                 else
@@ -315,7 +329,6 @@ public class PlatformerController : MonoBehaviour
         // Else, if the character is not jumping
         else
         {
-            RaycastHit rayHit;
             float castDistance = Mathf.Abs(m_YVelocity) * _DeltaTime + JUMP_OBSTACLES_DETECTION_OFFSET;
 
             #if UNITY_EDITOR
@@ -331,7 +344,7 @@ public class PlatformerController : MonoBehaviour
              */
 
             // If character touches something below
-            if (Physics.BoxCast(transform.position + Vector3.up * JUMP_OBSTACLES_DETECTION_OFFSET, Extents, Vector3.down, out rayHit, Quaternion.identity, castDistance, m_JumpObstaclesDetectionLayer))
+            if (Physics.BoxCast(transform.position + Vector3.up * JUMP_OBSTACLES_DETECTION_OFFSET, Extents, Vector3.down, out RaycastHit rayHit, Quaternion.identity, castDistance, m_JumpObstaclesDetectionLayer))
             {
                 // If the character wasn't on the floor
                 if(!m_IsOnFloor)
