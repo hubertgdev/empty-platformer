@@ -3,6 +3,7 @@ using UnityEngine.Events;
 
 ///<summary>
 /// Represents the health (as number of lives) of a character.
+/// Adding this component to an object means it can take damages and die.
 ///</summary>
 public class Health : MonoBehaviour
 {

@@ -4,7 +4,14 @@ using UnityEngine;
 using UnityEngine.Events;
 
 ///<summary>
-/// 
+/// A Platformer Controller for a playable character in a side-scrolling platformer.
+/// This implements basic actions and throw events as it acts:
+///     - Movement (X axis)
+///     - Jump
+///     
+/// NOTE: You must add two entries in your Input Settings to make it work:
+///     - "Horizontal" (axis): Used to control movement on the X axis
+///     - "Jump" (button): Used to perform Jump action
 ///</summary>
 public class PlatformerController : MonoBehaviour
 {
