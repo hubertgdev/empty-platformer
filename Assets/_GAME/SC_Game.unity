@@ -876,6 +876,48 @@ MonoBehaviour:
           m_StringArgument: Player is falling
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1582377604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1582377602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9388bc8e4beefe46894db0766e1d02c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MaxNumberOfLives: 3
+  m_NumberOfLivesAtStart: 3
+  m_OnLoseLives:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Player lose one or more lives
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnDie:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Player dies
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &1582377605 stripped
 BoxCollider:
   m_CorrespondingSourceObject: {fileID: 9170928101642006298, guid: e584affe90792a64ca62d9a5516f0234,
