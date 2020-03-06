@@ -53,6 +53,17 @@ public class PlatformerController : MonoBehaviour
     [SerializeField, Tooltip("Defines the layers to check when detecting obstacles on jump")]
     private LayerMask m_JumpObstaclesDetectionLayer = ~0;
 
+    [Header("Other Settings")]
+
+    [SerializeField, Tooltip("If true, disables movement and jump")]
+    private bool m_FreezeController = false;
+
+    [SerializeField, Tooltip("If true, disables movement input and updates")]
+    private bool m_FreezeMovement = false;
+
+    [SerializeField, Tooltip("If true, disables jump input and updates")]
+    private bool m_FreezeJump = false;
+
     /***** Events *****/
 
     [Header("Movement Events")]
@@ -152,7 +163,7 @@ public class PlatformerController : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        CheckMovement(Time.deltaTime);
+        UpdateMovement(Time.deltaTime);
         UpdateJump(Time.deltaTime);
     }
 
@@ -162,10 +173,20 @@ public class PlatformerController : MonoBehaviour
     #region Movement
 
     /// <summary>
+    /// Checks if the character is moving.
+    /// </summary>
+    public bool IsMoving
+    {
+        get { return m_MovedLastFrame; }
+    }
+
+    /// <summary>
     /// Checks for the movement inputs, and apply movement if required.
     /// </summary>
-    private void CheckMovement(float _DeltaTime)
+    private void UpdateMovement(float _DeltaTime)
     {
+        if(m_FreezeMovement || m_FreezeController) { return; }
+
         // Get the movement input
         float hMovement = Input.GetAxis("Horizontal");
         Vector3 movement = Vector3.right * hMovement;
@@ -264,16 +285,45 @@ public class PlatformerController : MonoBehaviour
 
     #region Jump
 
-    private void StopJump()
+    /// <summary>
+    /// Checks if the character is juming.
+    /// </summary>
+    public bool IsJumping
     {
-        m_IsJumping = false;
-        m_YVelocity = 0f;
-        m_OnUpdateJump.Invoke();
-        m_OnStopJump.Invoke();
+        get { return m_IsJumping; }
     }
 
+    /// <summary>
+    /// Checks if the character is on the floor.
+    /// </summary>
+    public bool IsOnFloor
+    {
+        get { return m_IsOnFloor; }
+    }
+
+    /// <summary>
+    /// Checks if the character is falling (not jumping and not on the floor).
+    /// </summary>
+    public bool IsFalling
+    {
+        get { return !IsJumping && !IsOnFloor; }
+    }
+
+    /// <summary>
+    /// Gets the jump timer ratio, over the jump total duration.
+    /// </summary>
+    public float JumpRatio
+    {
+        get { return (IsJumping) ? m_JumpTime / m_JumpCurve.ComputeDuration() : 1f; }
+    }
+
+    /// <summary>
+    /// Checks for the Jump input, and updates the Jump state and the character Y position.
+    /// </summary>
     private void UpdateJump(float _DeltaTime)
     {
+        if(m_FreezeJump || m_FreezeController) { return; }
+
         // If the character is currently jumping
         if (m_IsJumping)
         {
@@ -397,6 +447,17 @@ public class PlatformerController : MonoBehaviour
                 m_OnBeginJump.Invoke();
             }
         }
+    }
+
+    /// <summary>
+    /// Stops a Jump action by resetting the jump state.
+    /// </summary>
+    private void StopJump()
+    {
+        m_IsJumping = false;
+        m_YVelocity = 0f;
+        m_OnUpdateJump.Invoke();
+        m_OnStopJump.Invoke();
     }
 
     #endregion
