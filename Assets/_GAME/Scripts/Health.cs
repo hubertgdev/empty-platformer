@@ -77,7 +77,7 @@ public class Health : MonoBehaviour
     /// </summary>
     public bool IsDead
     {
-        get { return m_RemainingLives > 0; }
+        get { return m_RemainingLives <= 0; }
     }
 
     /// <summary>

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 966242255}
   - component: {fileID: 1582377603}
   - component: {fileID: 1582377604}
+  - component: {fileID: 1311515129119189826}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -280,6 +281,67 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Player dies
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1311515129119189826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659166293689886553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a6787101939d1c479951dbf1ab0d0c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DamagingLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  m_DamagesOnContact: 1
+  m_InvincibilityDuration: 0.4
+  m_Health: {fileID: 1582377604}
+  m_Collider: {fileID: 9170928101642006298}
+  m_OnBeginInvincibility:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Player becomes invincible
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnUpdateInvincibility:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Player is invincible
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnStopInvincibility:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Player is no longer invincible
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1973311649242733723
