@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 3665546685068264786}
   - component: {fileID: 3665546685068264787}
   - component: {fileID: 3665546685068264788}
+  - component: {fileID: 3665546685892001969}
+  - component: {fileID: 3665546685892001970}
   m_Layer: 11
   m_Name: Enemy
   m_TagString: Untagged
@@ -79,6 +81,75 @@ MonoBehaviour:
   m_PathDirection: 1
   m_Distance: 9
   m_Collider: {fileID: 3665546685068264786}
+--- !u!114 &3665546685892001969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3665546685068264789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9388bc8e4beefe46894db0766e1d02c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MaxNumberOfLives: 3
+  m_NumberOfLivesAtStart: 3
+  m_OnLoseLives:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Enemy loses one or more lives
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnDie:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Enemy dies
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3665546685892001970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3665546685068264789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deb6cdb0f93aa42e58e660a2f13750c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SpawnPosition: {fileID: 0}
+  m_OnRespawn:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Enemy respawns
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3665546686389297645
 GameObject:
   m_ObjectHideFlags: 0

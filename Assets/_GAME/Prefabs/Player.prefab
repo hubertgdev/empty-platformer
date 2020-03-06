@@ -14,10 +14,11 @@ GameObject:
   - component: {fileID: 1582377603}
   - component: {fileID: 1582377604}
   - component: {fileID: 1311515129119189826}
+  - component: {fileID: 7098764881946107000}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -107,7 +108,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_GravityScale: 5
-  m_HoldInputMode: 0
+  m_HoldInputMode: 1
   m_MinJumpDuration: 0.2
   m_JumpObstaclesDetectionLayer:
     serializedVersion: 2
@@ -342,6 +343,33 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Player is no longer invincible
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7098764881946107000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659166293689886553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deb6cdb0f93aa42e58e660a2f13750c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SpawnPosition: {fileID: 0}
+  m_OnRespawn:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Player respawns
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1973311649242733723
