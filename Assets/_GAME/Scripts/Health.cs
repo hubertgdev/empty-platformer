@@ -20,12 +20,15 @@ public class Health : MonoBehaviour
 
     [Header("Events")]
 
-    [SerializeField, Tooltip("")]
+    // Called when the character lose one or more lives
+    [SerializeField]
     private DamagesInfosEvent m_OnLoseLives = new DamagesInfosEvent();
 
+    // Called when the character dies (has non remaining lives)
     [SerializeField]
     private UnityEvent m_OnDie = new UnityEvent();
 
+    // Number of current remaining lives
     private int m_RemainingLives = 0;
 
     #endregion
