@@ -88,11 +88,11 @@ public class PlatformerController : MonoBehaviour
 
     // Called when the player press the Jump button and the Jump action begins to apply
     [SerializeField]
-    private UnityEvent m_OnBeginJump = new UnityEvent();
+    private JumpInfosEvent m_OnBeginJump = new JumpInfosEvent();
 
     // Called each frame the character is ascending after a Jump
     [SerializeField]
-    private UnityEvent m_OnUpdateJump = new UnityEvent();
+    private JumpUpdateInfosEvent m_OnUpdateJump = new JumpUpdateInfosEvent();
 
     // Called when the character stops jumping by releasing the Jump button (if Hold Input Mode enabled), by encountering an obstacle above
     // him, or by completing the Jump curve
@@ -101,19 +101,19 @@ public class PlatformerController : MonoBehaviour
 
     // Called when the character lands on the floor after falling down
     [SerializeField]
-    private UnityEvent m_OnLand = new UnityEvent();
+    private LandingInfosEvent m_OnLand = new LandingInfosEvent();
 
     // Called when the character is falling down
     [SerializeField]
-    private UnityEvent m_OnFall = new UnityEvent();
+    private FloatEvent m_OnFall = new FloatEvent();
 
     /***** Movement properties *****/
 
     // Stores the last orientation of the character to eventually trigger the OnChangeOrientation event if it changes
     private Vector3 m_LastOrientation = Vector3.zero;
 
-    // Defines if the player has moved the last frame or not, in order to trigger OnBegin|Update|StopMove events
-    private bool m_MovedLastFrame = false;
+    // The last movement input axis, helpful for checking if the player moved or not
+    private float m_LastMovementAxis = 0f;
 
     /***** Jump properties *****/
 
@@ -124,13 +124,16 @@ public class PlatformerController : MonoBehaviour
     private float m_JumpTime = 0f;
 
     // The Y position of the character when it begins to jump
-    private float m_JumpInitialYPosition = 0f;
+    private Vector3 m_JumpInitialPosition = Vector3.zero;
 
     // Defines the current velocity of the character on the Y axis
     private float m_YVelocity = 0f;
 
     // Defines if the character is currently jumping
     private bool m_IsJumping = false;
+
+    // Defines from how much time the character is falling
+    private float m_FallingTime = 0f;
 
     /***** Debug properties *****/
 
@@ -177,7 +180,7 @@ public class PlatformerController : MonoBehaviour
     /// </summary>
     public bool IsMoving
     {
-        get { return m_MovedLastFrame; }
+        get { return m_LastMovementAxis != 0f; }
     }
 
     /// <summary>
@@ -210,10 +213,10 @@ public class PlatformerController : MonoBehaviour
         if (_Direction == Vector3.zero)
         {
             // If the player moved the last frame
-            if (m_MovedLastFrame)
+            if (m_LastMovementAxis != 0f)
             {
                 // Call onStopMove event
-                m_MovedLastFrame = false;
+                m_LastMovementAxis = 0f;
                 m_OnStopMove.Invoke();
             }
 
@@ -225,10 +228,9 @@ public class PlatformerController : MonoBehaviour
         Vector3 targetPosition = lastPosition;
 
         // If player didn't move last frame
-        if (!m_MovedLastFrame)
+        if (m_LastMovementAxis == 0f)
         {
             // Call OnBeginMove event
-            m_MovedLastFrame = true;
             m_OnBeginMove.Invoke(new MovementInfos { speed = m_Speed, lastPosition = lastPosition, currentPosition = targetPosition });
         }
 
@@ -250,6 +252,8 @@ public class PlatformerController : MonoBehaviour
         Orientation = _Direction;
         // Call OnUpdateMove event
         m_OnUpdateMove.Invoke(new MovementInfos { speed = m_Speed, lastPosition = lastPosition, currentPosition = targetPosition });
+
+        m_LastMovementAxis = _Direction.x;
 
         // The movement has been applied: return true
         return true;
@@ -357,7 +361,7 @@ public class PlatformerController : MonoBehaviour
             {
                 // Place player at the maximum height possible, and stop jump
                 Vector3 targetPosition = transform.position;
-                targetPosition.y = m_JumpInitialYPosition + lastHeight + rayHit.distance;
+                targetPosition.y = m_JumpInitialPosition.y + lastHeight + rayHit.distance;
                 transform.position = targetPosition;
                 StopJump();
             }
@@ -369,7 +373,7 @@ public class PlatformerController : MonoBehaviour
                 {
                     // Place character at the maximum jump height, and call OnUpdateJump and OnStopJump() events
                     Vector3 targetPosition = transform.position;
-                    targetPosition.y = m_JumpInitialYPosition + m_JumpCurve.Evaluate(m_JumpCurve.ComputeDuration());
+                    targetPosition.y = m_JumpInitialPosition.y + m_JumpCurve.Evaluate(m_JumpCurve.ComputeDuration());
                     transform.position = targetPosition;
                     StopJump();
                 }
@@ -377,9 +381,9 @@ public class PlatformerController : MonoBehaviour
                 else
                 {
                     Vector3 targetPosition = transform.position;
-                    targetPosition.y = m_JumpInitialYPosition + m_JumpCurve.Evaluate(m_JumpTime);
+                    targetPosition.y = m_JumpInitialPosition.y + m_JumpCurve.Evaluate(m_JumpTime);
                     transform.position = targetPosition;
-                    m_OnUpdateJump.Invoke();
+                    m_OnUpdateJump.Invoke(new JumpUpdateInfos { jumpOrigin = m_JumpInitialPosition, jumpTime = m_JumpTime, jumpRatio = JumpRatio });
                 }
             }
         }
@@ -416,7 +420,9 @@ public class PlatformerController : MonoBehaviour
                     m_IsOnFloor = true;
 
                     // Call OnLand event
-                    m_OnLand.Invoke();
+                    m_OnLand.Invoke(new LandingInfos { fallingTime = m_FallingTime, landingPosition = targetPosition });
+
+                    m_FallingTime = 0f;
                 }
             }
             // Else, if there's nothing below the character
@@ -427,10 +433,18 @@ public class PlatformerController : MonoBehaviour
                 targetPosition.y += m_YVelocity * _DeltaTime;
                 transform.position = targetPosition;
 
-                m_IsOnFloor = false;
+                if(m_IsOnFloor)
+                {
+                    m_IsOnFloor = false;
+                    m_FallingTime = 0f;
+                }
+                else
+                {
+                    m_FallingTime += _DeltaTime;
+                }
 
                 // Call OnFall event
-                m_OnFall.Invoke();
+                m_OnFall.Invoke(m_FallingTime);
 
                 // Update velocity (apply gravity)
                 m_YVelocity += Physics.gravity.y * m_GravityScale * _DeltaTime;
@@ -443,8 +457,8 @@ public class PlatformerController : MonoBehaviour
                 m_IsOnFloor = false;
                 m_IsJumping = true;
                 m_JumpTime = 0f;
-                m_JumpInitialYPosition = transform.position.y;
-                m_OnBeginJump.Invoke();
+                m_JumpInitialPosition = transform.position;
+                m_OnBeginJump.Invoke(new JumpInfos { jumpOrigin = m_JumpInitialPosition, movement = m_LastMovementAxis });
             }
         }
     }
@@ -456,7 +470,7 @@ public class PlatformerController : MonoBehaviour
     {
         m_IsJumping = false;
         m_YVelocity = 0f;
-        m_OnUpdateJump.Invoke();
+        m_OnUpdateJump.Invoke(new JumpUpdateInfos { jumpOrigin = m_JumpInitialPosition, jumpRatio = JumpRatio, jumpTime = m_JumpTime });
         m_OnStopJump.Invoke();
     }
 
