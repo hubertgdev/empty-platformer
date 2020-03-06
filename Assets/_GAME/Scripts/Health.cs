@@ -72,6 +72,12 @@ public class Health : MonoBehaviour
         }
     }
 
+    public void ResetHealth()
+    {
+        m_RemainingLives = m_NumberOfLivesAtStart;
+        ApplyDeath();
+    }
+
     /// <summary>
     /// Checks if this character is dead (has no remaining lives).
     /// </summary>
