@@ -531,8 +531,7 @@ public class PlatformerController : MonoBehaviour
             Vector3 movement = Vector3.zero;
             movement.y = m_YVelocity == 0 ? 0 : Mathf.Sign(m_YVelocity);
             movement.x = m_LastMovementAxis;
-            movement.Normalize();
-            return movement;
+            return movement == Vector3.zero ? Vector3.zero : movement.normalized;
         }
     }
 
