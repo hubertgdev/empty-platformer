@@ -28,6 +28,9 @@ public class ContactDamages : MonoBehaviour
 
     [Header("Events")]
 
+    [SerializeField]
+    private HitInfosEvent m_OnContact = new HitInfosEvent();
+
     // Called after the character take damages without damages, and enter in invincible state
     // Sends the invincibility duration
     [SerializeField]
@@ -85,9 +88,19 @@ public class ContactDamages : MonoBehaviour
         // If the character is still invincible, don't check for contact damages
         if (IsInvincible) { return; }
 
+        Collider[] contacts = Physics.OverlapBox(transform.position, Extents, Quaternion.identity, m_DamagingLayer);
+
         // If the character touches a damaging object
-        if (Physics.OverlapBox(transform.position, Extents, Quaternion.identity, m_DamagingLayer).Length != 0)
+        if (contacts.Length != 0)
         {
+            m_OnContact.Invoke(new HitInfos()
+            {
+                shooter = contacts[0].gameObject,
+                target = gameObject,
+                distance = 0f,
+                damages = m_DamagesOnContact
+            });
+
             // Apply damages
             m_Health.RemoveLives(m_DamagesOnContact);
             // If not dead, begins invincibility state
