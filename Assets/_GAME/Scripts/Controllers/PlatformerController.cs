@@ -464,6 +464,7 @@ public class PlatformerController : MonoBehaviour
                 m_IsJumping = true;
                 m_JumpTime = 0f;
                 m_JumpInitialPosition = transform.position;
+                m_YVelocity = 1f;
                 m_OnBeginJump.Invoke(new JumpInfos { jumpOrigin = m_JumpInitialPosition, movement = m_LastMovementAxis });
             }
         }
@@ -523,6 +524,18 @@ public class PlatformerController : MonoBehaviour
         set { m_FreezeJump = value; }
     }
 
+    public Vector3 MovementDirection
+    {
+        get
+        {
+            Vector3 movement = Vector3.zero;
+            movement.y = m_YVelocity == 0 ? 0 : Mathf.Sign(m_YVelocity);
+            movement.x = m_LastMovementAxis;
+            movement.Normalize();
+            return movement;
+        }
+    }
+
     /// <summary>
     /// Returns the size of the object, based on its collider's bounds.
     /// If no collider set, returns Vector3.one.
@@ -555,6 +568,16 @@ public class PlatformerController : MonoBehaviour
         }
     }
 
+    public float YVelocity
+    {
+        get { return m_YVelocity; }
+    }
+
+    public float LastMovementAxis
+    {
+        get { return m_LastMovementAxis; }
+    }
+
     #endregion
 
 
@@ -574,6 +597,10 @@ public class PlatformerController : MonoBehaviour
         // Draw the jump obstacles detection cast
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireCube(transform.position + Vector3.up * m_LastJumpObstaclesDetectionCastDistance, Size);
+
+        // Draw the movement direction vector
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, transform.position + MovementDirection * 3f);
     }
 
     #endif
