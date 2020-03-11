@@ -103,6 +103,11 @@ public class PlatformerController : MonoBehaviour
     [SerializeField]
     private LandingInfosEvent m_OnLand = new LandingInfosEvent();
 
+    // Called when the character hit something above him
+    // Sends the hit position
+    [SerializeField]
+    private Vector3Event m_OnHitCeiling = new Vector3Event();
+
     // Called when the character is falling down
     [SerializeField]
     private FloatEvent m_OnFall = new FloatEvent();
@@ -363,6 +368,7 @@ public class PlatformerController : MonoBehaviour
                 Vector3 targetPosition = transform.position;
                 targetPosition.y = m_JumpInitialPosition.y + lastHeight + rayHit.distance;
                 transform.position = targetPosition;
+                m_OnHitCeiling.INvoke(rayHit.position);
                 StopJump();
             }
             // Else, if there's no obstacle above
