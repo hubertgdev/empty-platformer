@@ -7,6 +7,7 @@
 public struct HitInfos
 {
 	public GameObject shooter;
-	public float distance;
+	public GameObject target;
+    public float distance;
 	public int damages;
 }

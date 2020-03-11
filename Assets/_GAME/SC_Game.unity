@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.49641287, b: 0.5748173, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -783,7 +783,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1337325336}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: -4.5, y: 1, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1059666927}
@@ -1024,30 +1024,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1993062078}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2134937260 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7098764881946107000, guid: e584affe90792a64ca62d9a5516f0234,
-    type: 3}
-  m_PrefabInstance: {fileID: 7390137972806016252}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deb6cdb0f93aa42e58e660a2f13750c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2134937262 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234,
-    type: 3}
-  m_PrefabInstance: {fileID: 7390137972806016252}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9388bc8e4beefe46894db0766e1d02c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3665546685892001967
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1063,7 +1039,7 @@ PrefabInstance:
     - target: {fileID: 3665546685068264785, guid: bb5fd544920c5c141b05d4a638f2de8e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3665546685068264785, guid: bb5fd544920c5c141b05d4a638f2de8e,
         type: 3}
@@ -1209,50 +1185,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234, type: 3}
-      propertyPath: m_OnDie.m_PersistentCalls.m_Calls.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234, type: 3}
-      propertyPath: m_OnDie.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234, type: 3}
-      propertyPath: m_OnDie.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234, type: 3}
-      propertyPath: m_OnDie.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 2134937260}
-    - target: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234, type: 3}
-      propertyPath: m_OnDie.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: Respawn
-      objectReference: {fileID: 0}
-    - target: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234, type: 3}
-      propertyPath: m_OnDie.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234, type: 3}
-      propertyPath: m_OnDie.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234, type: 3}
-      propertyPath: m_OnDie.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234, type: 3}
-      propertyPath: m_OnDie.m_PersistentCalls.m_Calls.Array.data[2].m_Target
-      value: 
-      objectReference: {fileID: 2134937262}
-    - target: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234, type: 3}
-      propertyPath: m_OnDie.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: ResetHealth
-      objectReference: {fileID: 0}
-    - target: {fileID: 1582377604, guid: e584affe90792a64ca62d9a5516f0234, type: 3}
-      propertyPath: m_OnDie.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 659166293689886553, guid: e584affe90792a64ca62d9a5516f0234,
         type: 3}
       propertyPath: m_Name

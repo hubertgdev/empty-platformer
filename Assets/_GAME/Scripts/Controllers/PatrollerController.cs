@@ -17,6 +17,8 @@ public class PatrollerController : MonoBehaviour
         Right
     }
 
+    #region Properties
+
     [SerializeField, Tooltip("Defines tyhe speed of the object (in unit per second)")]
     private float m_Speed = 3f;
 
@@ -29,6 +31,9 @@ public class PatrollerController : MonoBehaviour
     [SerializeField, Tooltip("Used mostly to draw gizmos, and to get the size of the object")]
     private Collider m_Collider = null;
 
+    [SerializeField, Tooltip("If true, the Patroller is not updated")]
+    private bool m_FreezePatroller = false;
+
     // The initial position of the character
     private Vector3 m_Origin = Vector3.zero;
 
@@ -38,12 +43,17 @@ public class PatrollerController : MonoBehaviour
     // Is the object is going forward or backward on, its path?
     private bool m_Forward = true;
 
+    #endregion
+
+
+    #region Lifecycle
+
     /// <summary>
     /// Called when this component is loaded.
     /// </summary>
     private void Awake()
     {
-        if(m_Collider == null) { m_Collider = GetComponent<BoxCollider>(); }
+        if (m_Collider == null) { m_Collider = GetComponent<BoxCollider>(); }
         m_Origin = transform.position;
     }
 
@@ -55,11 +65,41 @@ public class PatrollerController : MonoBehaviour
         UpdatePosition(Time.deltaTime);
     }
 
+    #endregion
+
+
+    #region Public Methods
+
+    /// <summary>
+    /// Resets the Patroller state (place the character at the beginning of its path).
+    /// </summary>
+    public void ResetPatroller()
+    {
+        m_CurrentPathDistance = 0f;
+        m_Forward = true;
+    }
+
+    /// <summary>
+    /// Freezes thsi Patroller.
+    /// </summary>
+    public bool FreezePatroller
+    {
+        get { return m_FreezePatroller; }
+        set { m_FreezePatroller = value; }
+    }
+
+    #endregion
+
+
+    #region Private Methods
+
     /// <summary>
     /// Updates the position of this object on its path.
     /// </summary>
     private void UpdatePosition(float _DeltaTime)
     {
+        if(m_FreezePatroller) { return; }
+
         float movement = m_Speed * _DeltaTime;
         m_CurrentPathDistance = m_Forward ? Mathf.Min(m_CurrentPathDistance + movement, m_Distance) : Mathf.Max(0f, m_CurrentPathDistance - movement);
         if(m_CurrentPathDistance == m_Distance || m_CurrentPathDistance == 0f)
@@ -113,5 +153,7 @@ public class PatrollerController : MonoBehaviour
     }
 
     #endif
+
+    #endregion
 
 }

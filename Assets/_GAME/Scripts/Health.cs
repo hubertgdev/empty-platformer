@@ -34,6 +34,7 @@ public class Health : MonoBehaviour
 
     #endregion
 
+
     #region Lifecycle
 
     /// <summary>
@@ -71,6 +72,14 @@ public class Health : MonoBehaviour
 
             ApplyDeath();
         }
+    }
+
+    /// <summary>
+    /// Decrease the number of lives using the given Hit Infos.
+    /// </summary>
+    public void RemoveLives(HitInfos _HitInfos)
+    {
+        RemoveLives(_HitInfos.damages);
     }
 
     public void ResetHealth()
