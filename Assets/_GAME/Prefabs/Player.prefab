@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1582377604}
   - component: {fileID: 1311515129119189826}
   - component: {fileID: 7098764881946107000}
+  - component: {fileID: 1643708231}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -284,6 +285,28 @@ MonoBehaviour:
           m_StringArgument: Player dies
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7098764881946107000}
+        m_MethodName: Respawn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1582377604}
+        m_MethodName: ResetHealth
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1311515129119189826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,7 +323,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   m_DamagesOnContact: 1
-  m_InvincibilityDuration: 0.4
+  m_InvincibilityDuration: 2
   m_Health: {fileID: 1582377604}
   m_Collider: {fileID: 9170928101642006298}
   m_OnBeginInvincibility:
@@ -372,6 +395,70 @@ MonoBehaviour:
           m_StringArgument: Player respawns
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1643708231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659166293689886553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39944770f872a42fe8268c16d1568d19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AimingType: 0
+  m_ShootRange: 10
+  m_ShootCooldown: 0.3
+  m_ShootableObjectsLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  m_ShootDamages: 1
+  m_FreezeShoot: 0
+  m_OnShoot:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Player shoots
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnUpdateAim:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Player's aiming vector changes
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnHitTarget:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Player hits a target
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_EnableDebugLines: 1
+  m_DebugLineDuration: 2
 --- !u!1 &1973311649242733723
 GameObject:
   m_ObjectHideFlags: 0

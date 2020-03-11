@@ -33,4 +33,13 @@ public class Respawner : MonoBehaviour
         m_OnRespawn.Invoke(new SpawnInfos { lastPosition = lastPosition, spawnPosition = m_SpawnPosition.position });
     }
 
+    /// <summary>
+    /// Make this object respawns to its Spawn Position after the given delay.
+    /// NOTE: The object is simply moved to that position.
+    /// </summary>
+    public void RespawnDelayed(float _Delay)
+    {
+        Invoke(nameof(this.Respawn), _Delay);
+    }
+
 }

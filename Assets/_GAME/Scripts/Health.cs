@@ -21,10 +21,11 @@ public class Health : MonoBehaviour
     [Header("Events")]
 
     // Called when the character lose one or more lives
+    // Sends informations about the number of lives lost and the remaining lives
     [SerializeField]
     private DamagesInfosEvent m_OnLoseLives = new DamagesInfosEvent();
 
-    // Called when the character dies (has non remaining lives)
+    // Called when the character dies (has no remaining lives)
     [SerializeField]
     private UnityEvent m_OnDie = new UnityEvent();
 
@@ -32,6 +33,7 @@ public class Health : MonoBehaviour
     private int m_RemainingLives = 0;
 
     #endregion
+
 
     #region Lifecycle
 
@@ -70,6 +72,14 @@ public class Health : MonoBehaviour
 
             ApplyDeath();
         }
+    }
+
+    /// <summary>
+    /// Decrease the number of lives using the given Hit Infos.
+    /// </summary>
+    public void RemoveLives(HitInfos _HitInfos)
+    {
+        RemoveLives(_HitInfos.damages);
     }
 
     public void ResetHealth()
