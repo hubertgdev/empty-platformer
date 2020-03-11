@@ -13,9 +13,6 @@ public class Health : MonoBehaviour
     [Header("Settings")]
 
     [SerializeField]
-    private bool m_IsInvincible = false;
-
-    [SerializeField]
     private int m_MaxNumberOfLives = 3;
 
     [SerializeField]
