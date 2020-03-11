@@ -368,7 +368,7 @@ public class PlatformerController : MonoBehaviour
                 Vector3 targetPosition = transform.position;
                 targetPosition.y = m_JumpInitialPosition.y + lastHeight + rayHit.distance;
                 transform.position = targetPosition;
-                m_OnHitCeiling.INvoke(rayHit.position);
+                m_OnHitCeiling.Invoke(rayHit.point);
                 StopJump();
             }
             // Else, if there's no obstacle above
