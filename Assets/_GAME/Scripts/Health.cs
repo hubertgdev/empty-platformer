@@ -13,6 +13,9 @@ public class Health : MonoBehaviour
     [Header("Settings")]
 
     [SerializeField]
+    private bool m_IsInvincible = false;
+
+    [SerializeField]
     private int m_MaxNumberOfLives = 3;
 
     [SerializeField]
@@ -21,10 +24,11 @@ public class Health : MonoBehaviour
     [Header("Events")]
 
     // Called when the character lose one or more lives
+    // Sends informations about the number of lives lost and the remaining lives
     [SerializeField]
     private DamagesInfosEvent m_OnLoseLives = new DamagesInfosEvent();
 
-    // Called when the character dies (has non remaining lives)
+    // Called when the character dies (has no remaining lives)
     [SerializeField]
     private UnityEvent m_OnDie = new UnityEvent();
 
