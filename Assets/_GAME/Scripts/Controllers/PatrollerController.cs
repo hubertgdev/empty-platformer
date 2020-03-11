@@ -1,44 +1,63 @@
 ﻿using UnityEngine;
 
 ///<summary>
-/// 
+/// Represents a patrolling entity.
+/// This character will go toward its target, then go back, continuously.
+/// Note that the transform.right vector of this object is its current direction.
 ///</summary>
 public class PatrollerController : MonoBehaviour
 {
 
+    /// <summary>
+    /// Represents the first direction to go.
+    /// </summary>
     public enum EPatrollerPathDirection
     {
         Left,
         Right
     }
 
-    [SerializeField]
+    [SerializeField, Tooltip("Defines tyhe speed of the object (in unit per second)")]
     private float m_Speed = 3f;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Defines the first direction to go")]
     private EPatrollerPathDirection m_PathDirection = EPatrollerPathDirection.Right;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Defines the length of the path to follow")]
     private float m_Distance = 9f;
 
-    [SerializeField]
-    private BoxCollider m_Collider = null;
+    [SerializeField, Tooltip("Used mostly to draw gizmos, and to get the size of the object")]
+    private Collider m_Collider = null;
 
+    // The initial position of the character
     private Vector3 m_Origin = Vector3.zero;
+
+    // The distance traveled by the object on its path
     private float m_CurrentPathDistance = 0f;
+
+    // Is the object is going forward or backward on, its path?
     private bool m_Forward = true;
 
+    /// <summary>
+    /// Called when this component is loaded.
+    /// </summary>
     private void Awake()
     {
         if(m_Collider == null) { m_Collider = GetComponent<BoxCollider>(); }
         m_Origin = transform.position;
     }
 
+    /// <summary>
+    /// Called once per frame.
+    /// </summary>
     private void Update()
     {
         UpdatePosition(Time.deltaTime);
     }
 
+    /// <summary>
+    /// Updates the position of this object on its path.
+    /// </summary>
     private void UpdatePosition(float _DeltaTime)
     {
         float movement = m_Speed * _DeltaTime;
@@ -48,19 +67,34 @@ public class PatrollerController : MonoBehaviour
             m_Forward = !m_Forward;
         }
 
-        transform.position = m_Origin + ForwardVector * m_CurrentPathDistance;
+        transform.position = m_Origin + PathVector * m_CurrentPathDistance;
+        transform.right = ForwardVector;
     }
 
+    /// <summary>
+    /// Gets the bounds of this object, using its collider.
+    /// </summary>
     private Vector3 Size
     {
         get
         {
-            if(m_Collider == null) { m_Collider = GetComponent<BoxCollider>(); }
+            if(m_Collider == null) { m_Collider = GetComponent<Collider>(); }
             return m_Collider != null ? m_Collider.bounds.size : Vector3.one;
         }
     }
 
+    /// <summary>
+    /// Gets the current direction of the movement of this object.
+    /// </summary>
     private Vector3 ForwardVector
+    {
+        get { return m_Forward ? PathVector : -PathVector; }
+    }
+
+    /// <summary>
+    /// Gets the selected direction vector for the path of this object.
+    /// </summary>
+    private Vector3 PathVector
     {
         get { return (m_PathDirection == EPatrollerPathDirection.Right) ? Vector3.right : Vector3.left; }
     }
@@ -74,7 +108,7 @@ public class PatrollerController : MonoBehaviour
         Vector3 size = Size;
         size.x += m_Distance;
         Vector3 origin = (UnityEditor.EditorApplication.isPlaying) ? m_Origin : transform.position;
-        Vector3 center = origin - ForwardVector * (Size.x / 2f) + ForwardVector * (size.x / 2f);
+        Vector3 center = origin - PathVector * (Size.x / 2f) + PathVector * (size.x / 2f);
         Gizmos.DrawWireCube(center, size);
     }
 

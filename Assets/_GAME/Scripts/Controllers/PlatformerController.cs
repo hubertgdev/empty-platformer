@@ -468,16 +468,54 @@ public class PlatformerController : MonoBehaviour
     /// </summary>
     private void StopJump()
     {
-        m_IsJumping = false;
-        m_YVelocity = 0f;
-        m_OnUpdateJump.Invoke(new JumpUpdateInfos { jumpOrigin = m_JumpInitialPosition, jumpRatio = JumpRatio, jumpTime = m_JumpTime });
-        m_OnStopJump.Invoke();
+        if(m_IsJumping)
+        {
+            m_IsJumping = false;
+            m_YVelocity = 0f;
+            m_OnUpdateJump.Invoke(new JumpUpdateInfos { jumpOrigin = m_JumpInitialPosition, jumpRatio = JumpRatio, jumpTime = m_JumpTime });
+            m_OnStopJump.Invoke();
+        }
     }
 
     #endregion
 
 
     #region Common
+
+    /// <summary>
+    /// Resets the controller state (cancels jump).
+    /// </summary>
+    public void ResetController()
+    {
+        StopJump();
+    }
+
+    /// <summary>
+    /// Freezes all the controller actions.
+    /// </summary>
+    public bool FreezeController
+    {
+        get { return m_FreezeController; }
+        set { m_FreezeController = value; }
+    }
+
+    /// <summary>
+    /// Freezes movement.
+    /// </summary>
+    public bool FreezeMovement
+    {
+        get { return m_FreezeMovement; }
+        set { m_FreezeMovement = value; }
+    }
+
+    /// <summary>
+    /// Freezes jump.
+    /// </summary>
+    public bool FreezeJump
+    {
+        get { return m_FreezeJump; }
+        set { m_FreezeJump = value; }
+    }
 
     /// <summary>
     /// Returns the size of the object, based on its collider's bounds.
