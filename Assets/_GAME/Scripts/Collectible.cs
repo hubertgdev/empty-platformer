@@ -16,7 +16,6 @@ public class Collectible : MonoBehaviour
 
     // Defines if this collectible has been collected
     private bool m_Collected = false;
-
     
     ///<summary>
     /// Checks if this collectible has been collected.
@@ -24,6 +23,14 @@ public class Collectible : MonoBehaviour
     public bool IsCollected
     {
         get { return m_Collected; }
+    }
+
+    ///<summary>
+    /// Gets the amount of score to get when collecting this object.
+    ///</summary>
+    public int Score
+    {
+        get { return m_Score; }
     }
     
     ///<summary>

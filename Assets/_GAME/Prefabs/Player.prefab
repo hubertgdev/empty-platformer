@@ -114,7 +114,7 @@ MonoBehaviour:
   m_JumpObstaclesDetectionLayer:
     serializedVersion: 2
     m_Bits: 311
-  m_FreezeController: 1
+  m_FreezeController: 0
   m_FreezeMovement: 0
   m_FreezeJump: 0
   m_OnBeginMove:
@@ -184,18 +184,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Playerr begins to jump
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_MethodName: TriggerJump
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Player begins to jump
           m_BoolArgument: 0
         m_CallState: 2
   m_OnUpdateJump:
@@ -242,7 +231,18 @@ MonoBehaviour:
         m_CallState: 2
   m_OnHitCeiling:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Player hits something above
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnFall:
     m_PersistentCalls:
       m_Calls:
@@ -409,6 +409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SpawnPosition: {fileID: 0}
+  m_SpawnPositions: []
   m_OnRespawn:
     m_PersistentCalls:
       m_Calls:
