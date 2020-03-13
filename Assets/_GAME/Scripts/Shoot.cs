@@ -34,7 +34,7 @@ public class Shoot : MonoBehaviour
     [SerializeField, Tooltip("Defines the number of lives the shoot action inflcts")]
     private int m_ShootDamages = 1;
 
-    [SerializeField, Tooltip("Defines the Z position of the pointer when aiming with mouse")]
+    [SerializeField, Tooltip("Defines the Z position of the pointer when aiming with mouse (useful for working with 2D)")]
     private float m_AimWithMouseZPosition = 0.5f;
 
     [SerializeField, Tooltip("Freezes the Shoot action")]
