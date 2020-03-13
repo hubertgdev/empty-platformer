@@ -123,7 +123,6 @@ public class Shoot : MonoBehaviour
             {
                 Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 point.z = m_AimWithMouseZPosition;
-                Debug.Log("POINT: " + point);
                 return point - transform.position;
             }
         }
