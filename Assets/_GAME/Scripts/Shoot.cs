@@ -69,12 +69,12 @@ public class Shoot : MonoBehaviour
     // The current cooldown coroutine
     private Coroutine m_ShootCooldownCoroutine = null;
 
+    private Scorer m_Scorer = null;
+
     #endregion
 
 
     #region Lifecycle
-
-    #endregion
 
     /// <summary>
     /// Called when this component is loaded.
@@ -82,6 +82,7 @@ public class Shoot : MonoBehaviour
     private void Awake()
     {
         m_ShootCooldownTimer = m_ShootCooldown;
+        if(m_Scorer == null) { m_Scorer = GetComponent<Scorer>(); }
     }
 
     /// <summary>
@@ -91,6 +92,9 @@ public class Shoot : MonoBehaviour
     {
         UpdateShoot(Time.deltaTime);
     }
+
+    #endregion
+
 
     #region Public Methods
 
@@ -155,6 +159,7 @@ public class Shoot : MonoBehaviour
                 {
                     shooter = gameObject,
                     target = rayHit.collider.gameObject,
+                    impact = rayHit.point,
                     distance = rayHit.distance,
                     damages = m_ShootDamages
                 };
@@ -162,10 +167,22 @@ public class Shoot : MonoBehaviour
                 // Call OnHitTarget event
                 m_OnHitTarget.Invoke(infos);
 
+                // Notify the target being hit
                 Shootable shootable = rayHit.collider.GetComponent<Shootable>();
                 if(shootable != null)
                 {
                     shootable.NotifyHit(infos);
+                }
+
+                // If this character can gain score
+                if(m_Scorer != null)
+                {
+                    // Get score from the target if possible
+                    ShotScore shotScore = rayHit.collider.GetComponent<ShotScore>();
+                    if(shotScore != null)
+                    {
+                        m_Scorer.GainScore(shotScore.ScoreByShot);
+                    }
                 }
 
                 #if UNITY_EDITOR

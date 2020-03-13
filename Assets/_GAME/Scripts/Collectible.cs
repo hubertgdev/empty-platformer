@@ -48,6 +48,13 @@ public class Collectible : MonoBehaviour
     {
         if(m_Collected) { return; }
 
+        Scorer scorer = _Other.GetComponent<Scorer>();
+        // If the entering entity can score
+        if (scorer != null)
+        {
+            scorer.GainScore(m_Score);
+        }
+
         m_Collected = true;
         m_OnCollect.Invoke(new CollectInfos()
         {
