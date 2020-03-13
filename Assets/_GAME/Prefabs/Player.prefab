@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1311515129119189826}
   - component: {fileID: 7098764881946107000}
   - component: {fileID: 1643708231}
+  - component: {fileID: 9031166136147954831}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -488,6 +489,33 @@ MonoBehaviour:
         m_CallState: 2
   m_EnableDebugLines: 1
   m_DebugLineDuration: 2
+--- !u!114 &9031166136147954831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659166293689886553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cf49dbdd42999c41942f60bc81fa164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Score: 0
+  m_OnScoreChange:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+        m_MethodName: LogMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Player scores
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1973311649242733723
 GameObject:
   m_ObjectHideFlags: 0
