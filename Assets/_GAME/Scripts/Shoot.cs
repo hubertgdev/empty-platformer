@@ -34,6 +34,9 @@ public class Shoot : MonoBehaviour
     [SerializeField, Tooltip("Defines the number of lives the shoot action inflcts")]
     private int m_ShootDamages = 1;
 
+    [SerializeField, Tooltip("Defines the Z position of the pointer when aiming with mouse (useful for working with 2D)")]
+    private float m_AimWithMouseZPosition = 0.5f;
+
     [SerializeField, Tooltip("Freezes the Shoot action")]
     private bool m_FreezeShoot = false;
 
@@ -45,7 +48,7 @@ public class Shoot : MonoBehaviour
 
     // Called when the aiming vector changes
     [SerializeField]
-    private Vector3Event m_OnUpdateAim = new Vector3Event();
+    private AimInfosEvent m_OnUpdateAim = new AimInfosEvent();
 
     // Called when a target is hit
     [SerializeField]
@@ -61,6 +64,9 @@ public class Shoot : MonoBehaviour
     [SerializeField, Tooltip("Defines the lifetime of debug lines if they're enabled")]
     private float m_DebugLineDuration = 2f;
 
+    [SerializeField]
+    private bool m_DrawAimVector = true;
+
     #endif
 
     // The current cooldown timer
@@ -68,6 +74,8 @@ public class Shoot : MonoBehaviour
 
     // The current cooldown coroutine
     private Coroutine m_ShootCooldownCoroutine = null;
+
+    private Vector3 m_LastAimVector = Vector3.zero;
 
     private Scorer m_Scorer = null;
 
@@ -81,8 +89,9 @@ public class Shoot : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        if (m_Scorer == null) { m_Scorer = GetComponent<Scorer>(); }
         m_ShootCooldownTimer = m_ShootCooldown;
-        if(m_Scorer == null) { m_Scorer = GetComponent<Scorer>(); }
+        m_LastAimVector = AimVector;
     }
 
     /// <summary>
@@ -90,6 +99,7 @@ public class Shoot : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        UpdateAim();
         UpdateShoot(Time.deltaTime);
     }
 
@@ -103,7 +113,20 @@ public class Shoot : MonoBehaviour
     /// </summary>
     public Vector3 AimVector
     {
-        get { return transform.right; }
+        get
+        {
+            if(m_AimingType == EShootAim.TransformRight)
+            {
+                return transform.right;
+            }
+            else
+            {
+                Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                point.z = m_AimWithMouseZPosition;
+                Debug.Log("POINT: " + point);
+                return point - transform.position;
+            }
+        }
     }
 
     /// <summary>
@@ -129,6 +152,26 @@ public class Shoot : MonoBehaviour
     #region Private Methods
 
     /// <summary>
+    /// CUpdates the aim vector.
+    /// Triggers OnUpdateAim if the vector changes
+    /// </summary>
+    private void UpdateAim()
+    {
+        Vector3 aimVector = AimVector.normalized;
+        if(aimVector != m_LastAimVector)
+        {
+            m_OnUpdateAim.Invoke(new AimInfos
+            {
+                origin = transform.position,
+                direction = aimVector,
+                range = m_ShootRange
+            });
+        }
+
+        m_LastAimVector = aimVector;
+    }
+
+    /// <summary>
     /// Updates the shoot action.
     /// If the character is currently shooting (its cooldown is running), the action is cancelled.
     /// If the hit object has a Shootable component, triggers OnShot event on that component.
@@ -140,20 +183,22 @@ public class Shoot : MonoBehaviour
 
         if(Input.GetButton("Shoot"))
         {
+            Vector3 aimVector = AimVector.normalized;
+
             // Start the cooldown coroutine
             m_ShootCooldownCoroutine = StartCoroutine(ApplyShootCooldown(m_ShootRange, m_ShootCooldown));
             // Call OnShoot event
             m_OnShoot.Invoke(new ShootInfos
             {
                 origin = transform.position,
-                direction = AimVector,
+                direction = aimVector,
                 range = m_ShootRange,
                 cooldown = m_ShootCooldown,
                 damages = m_ShootDamages
             });
 
             // If the shot hit something
-            if(Physics.Raycast(transform.position, AimVector, out RaycastHit rayHit, m_ShootRange, m_ShootableObjectsLayer))
+            if(Physics.Raycast(transform.position, aimVector, out RaycastHit rayHit, m_ShootRange, m_ShootableObjectsLayer))
             {
                 HitInfos infos = new HitInfos
                 {
@@ -188,16 +233,18 @@ public class Shoot : MonoBehaviour
                 #if UNITY_EDITOR
                 if(m_EnableDebugLines)
                 {
-                    Debug.DrawLine(transform.position, transform.position + AimVector * rayHit.distance, Color.red, m_DebugLineDuration);
+                    Debug.DrawLine(transform.position, transform.position + aimVector * rayHit.distance, Color.red, m_DebugLineDuration);
                 }
                 #endif
             }
             #if UNITY_EDITOR
             else if(m_EnableDebugLines)
             {
-                Debug.DrawLine(transform.position, transform.position + AimVector * m_ShootRange, Color.red, m_DebugLineDuration);
+                Debug.DrawLine(transform.position, transform.position + aimVector * m_ShootRange, Color.red, m_DebugLineDuration);
             }
             #endif
+
+            m_LastAimVector = aimVector;
         }
     }
 
@@ -217,6 +264,33 @@ public class Shoot : MonoBehaviour
 
         m_ShootCooldownCoroutine = null;
     }
+
+    #endregion
+
+
+    #region Debug
+
+    #if UNITY_EDITOR
+
+    private void OnDrawGizmos()
+    {
+        if(!m_DrawAimVector) { return; }
+
+        Gizmos.color = Color.yellow;
+
+        // Draw mouse pointer position if "aim with mouse" mode enabled
+        if (m_AimingType == EShootAim.AimWithMouse)
+        {
+            Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            point.z = m_AimWithMouseZPosition;
+
+            Gizmos.DrawWireSphere(point, .5f);
+        }
+        // Draw aim vector
+        Gizmos.DrawLine(transform.position, transform.position + AimVector.normalized * m_ShootRange);
+    }
+
+    #endif
 
     #endregion
 

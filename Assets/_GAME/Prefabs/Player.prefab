@@ -437,13 +437,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39944770f872a42fe8268c16d1568d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AimingType: 0
+  m_AimingType: 1
   m_ShootRange: 10
   m_ShootCooldown: 0.3
   m_ShootableObjectsLayer:
     serializedVersion: 2
     m_Bits: 2048
   m_ShootDamages: 1
+  m_AimWithMouseZPosition: 0.5
   m_FreezeShoot: 0
   m_OnShoot:
     m_PersistentCalls:
@@ -489,6 +490,7 @@ MonoBehaviour:
         m_CallState: 2
   m_EnableDebugLines: 1
   m_DebugLineDuration: 2
+  m_DrawAimVector: 1
 --- !u!114 &9031166136147954831
 MonoBehaviour:
   m_ObjectHideFlags: 0
