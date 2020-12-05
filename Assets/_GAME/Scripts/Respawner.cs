@@ -80,4 +80,12 @@ public class Respawner : MonoBehaviour
         Invoke(nameof(this.RespawnRandom), _Delay);
     }
 
+    /// <summary>
+    /// Called when this character respawns.
+    /// </summary>
+    public SpawnInfosEvent OnRespawn
+    {
+        get { return m_OnRespawn; }
+    }
+
 }

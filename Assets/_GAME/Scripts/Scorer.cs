@@ -27,6 +27,11 @@ public class Scorer : MonoBehaviour
         });
     }
 
+    public ScoringInfosEvent OnScoreChange
+    {
+        get { return m_OnScoreChange; }
+    }
+
     public int Score
     {
         get { return m_Score; }

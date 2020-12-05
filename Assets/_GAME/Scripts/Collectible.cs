@@ -64,4 +64,12 @@ public class Collectible : MonoBehaviour
         });
     }
 
+    /// <summary>
+    /// Called when a character collects this item.
+    /// </summary>
+    public CollectInfosEvent OnCollect
+    {
+        get { return m_OnCollect; }
+    }
+
 }

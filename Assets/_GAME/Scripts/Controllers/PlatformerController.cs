@@ -15,6 +15,51 @@ using UnityEngine.InputSystem;
 public class PlatformerController : MonoBehaviour
 {
 
+    #region Subclasses
+
+    [System.Serializable]
+    private class MovementEvents
+    {
+        // Called when the character starts moving
+        public MovementInfosEvent OnBeginMove = new MovementInfosEvent();
+
+        // Called each frame the character is moving (even if there's an obstacle in front of it)
+        public MovementInfosEvent OnUpdateMove = new MovementInfosEvent();
+
+        // Called when the character stops moving
+        public UnityEvent OnStopMove = new UnityEvent();
+
+        // Called when the character changes its movment direction
+        public Vector3Event OnChangeOrientation = new Vector3Event();
+    }
+
+    [System.Serializable]
+    private class JumpEvents
+    {
+        // Called when the player press the Jump button and the Jump action begins to apply
+        public JumpInfosEvent OnBeginJump = new JumpInfosEvent();
+
+        // Called each frame the character is ascending after a Jump
+        public JumpUpdateInfosEvent OnUpdateJump = new JumpUpdateInfosEvent();
+
+        // Called when the character stops jumping by releasing the Jump button (if Hold Input Mode enabled), by encountering an obstacle above
+        // him, or by completing the Jump curve
+        public UnityEvent OnStopJump = new UnityEvent();
+
+        // Called when the character lands on the floor after falling down
+        public LandingInfosEvent OnLand = new LandingInfosEvent();
+
+        // Called when the character hit something above him
+        // Sends the hit position
+        public Vector3Event OnHitCeiling = new Vector3Event();
+
+        // Called when the character is falling down
+        public FloatEvent OnFall = new FloatEvent();
+    }
+
+    #endregion
+
+
     #region Properties
 
     /***** Constants *****/
@@ -77,49 +122,13 @@ public class PlatformerController : MonoBehaviour
 
     [Header("Movement Events")]
 
-    // Called when the character starts moving
     [SerializeField]
-    private MovementInfosEvent m_OnBeginMove = new MovementInfosEvent();
-
-    // Called each frame the character is moving (even if there's an obstacle in front of it)
-    [SerializeField]
-    private MovementInfosEvent m_OnUpdateMove = new MovementInfosEvent();
-
-    // Called when the character stops moving
-    [SerializeField]
-    private UnityEvent m_OnStopMove = new UnityEvent();
-
-    // Called when the character changes its movment direction
-    [SerializeField]
-    private Vector3Event m_OnChangeOrientation = new Vector3Event();
+    private MovementEvents m_MovementEvents = new MovementEvents();
 
     [Header("Jump Events")]
 
-    // Called when the player press the Jump button and the Jump action begins to apply
     [SerializeField]
-    private JumpInfosEvent m_OnBeginJump = new JumpInfosEvent();
-
-    // Called each frame the character is ascending after a Jump
-    [SerializeField]
-    private JumpUpdateInfosEvent m_OnUpdateJump = new JumpUpdateInfosEvent();
-
-    // Called when the character stops jumping by releasing the Jump button (if Hold Input Mode enabled), by encountering an obstacle above
-    // him, or by completing the Jump curve
-    [SerializeField]
-    private UnityEvent m_OnStopJump = new UnityEvent();
-
-    // Called when the character lands on the floor after falling down
-    [SerializeField]
-    private LandingInfosEvent m_OnLand = new LandingInfosEvent();
-
-    // Called when the character hit something above him
-    // Sends the hit position
-    [SerializeField]
-    private Vector3Event m_OnHitCeiling = new Vector3Event();
-
-    // Called when the character is falling down
-    [SerializeField]
-    private FloatEvent m_OnFall = new FloatEvent();
+    private JumpEvents m_JumpEvents = new JumpEvents();
 
     /***** Movement properties *****/
 
@@ -252,7 +261,7 @@ public class PlatformerController : MonoBehaviour
             {
                 // Call onStopMove event
                 m_LastMovementAxis = 0f;
-                m_OnStopMove.Invoke();
+                m_MovementEvents.OnStopMove.Invoke();
             }
 
             // The movement hasn't been applied: return false
@@ -266,7 +275,7 @@ public class PlatformerController : MonoBehaviour
         if (m_LastMovementAxis == 0f)
         {
             // Call OnBeginMove event
-            m_OnBeginMove.Invoke(new MovementInfos { speed = m_Speed, lastPosition = lastPosition, currentPosition = targetPosition });
+            m_MovementEvents.OnBeginMove.Invoke(new MovementInfos { speed = m_Speed, lastPosition = lastPosition, currentPosition = targetPosition });
         }
 
         // Process obstacles detection
@@ -286,7 +295,7 @@ public class PlatformerController : MonoBehaviour
         transform.position = targetPosition;
         Orientation = _Direction;
         // Call OnUpdateMove event
-        m_OnUpdateMove.Invoke(new MovementInfos { speed = m_Speed, lastPosition = lastPosition, currentPosition = targetPosition });
+        m_MovementEvents.OnUpdateMove.Invoke(new MovementInfos { speed = m_Speed, lastPosition = lastPosition, currentPosition = targetPosition });
 
         m_LastMovementAxis = _Direction.x;
 
@@ -314,7 +323,7 @@ public class PlatformerController : MonoBehaviour
 
             // Apply orientation and call OnChangeOrientation event
             transform.right = orientation;
-            m_OnChangeOrientation.Invoke(orientation);
+            m_MovementEvents.OnChangeOrientation.Invoke(orientation);
             m_LastOrientation = orientation;
         }
     }
@@ -335,6 +344,38 @@ public class PlatformerController : MonoBehaviour
     private void ResetMoveDirectionX(InputAction.CallbackContext _Context)
     {
         m_MovementDirectionX = 0f;
+    }
+
+    /// <summary>
+    /// Called when the character starts moving.
+    /// </summary>
+    public MovementInfosEvent OnBeginMove
+    {
+        get { return m_MovementEvents.OnBeginMove; }
+    }
+
+    /// <summary>
+    /// Called each frame the character is moving (even if there's an obstacle in front of it).
+    /// </summary>
+    public MovementInfosEvent OnUpdateMove
+    {
+        get { return m_MovementEvents.OnUpdateMove; }
+    }
+
+    /// <summary>
+    /// Called when the character stops moving.
+    /// </summary>
+    public UnityEvent OnStopMove
+    {
+        get { return m_MovementEvents.OnStopMove; }
+    }
+
+    /// <summary>
+    /// Called when the character changes its movment direction.
+    /// </summary>
+    public Vector3Event OnChangeOrientation
+    {
+        get { return m_MovementEvents.OnChangeOrientation; }
     }
 
     #endregion
@@ -416,7 +457,7 @@ public class PlatformerController : MonoBehaviour
                 Vector3 targetPosition = transform.position;
                 targetPosition.y = m_JumpInitialPosition.y + lastHeight + rayHit.distance;
                 transform.position = targetPosition;
-                m_OnHitCeiling.Invoke(rayHit.point);
+                m_JumpEvents.OnHitCeiling.Invoke(rayHit.point);
                 StopJump();
             }
             // Else, if there's no obstacle above
@@ -437,7 +478,7 @@ public class PlatformerController : MonoBehaviour
                     Vector3 targetPosition = transform.position;
                     targetPosition.y = m_JumpInitialPosition.y + m_JumpCurve.Evaluate(m_JumpTime);
                     transform.position = targetPosition;
-                    m_OnUpdateJump.Invoke(new JumpUpdateInfos { jumpOrigin = m_JumpInitialPosition, jumpTime = m_JumpTime, jumpRatio = JumpRatio });
+                    m_JumpEvents.OnUpdateJump.Invoke(new JumpUpdateInfos { jumpOrigin = m_JumpInitialPosition, jumpTime = m_JumpTime, jumpRatio = JumpRatio });
                 }
             }
         }
@@ -474,7 +515,7 @@ public class PlatformerController : MonoBehaviour
                     m_IsOnFloor = true;
 
                     // Call OnLand event
-                    m_OnLand.Invoke(new LandingInfos { fallingTime = m_FallingTime, landingPosition = targetPosition });
+                    m_JumpEvents.OnLand.Invoke(new LandingInfos { fallingTime = m_FallingTime, landingPosition = targetPosition });
 
                     m_FallingTime = 0f;
                 }
@@ -498,7 +539,7 @@ public class PlatformerController : MonoBehaviour
                 }
 
                 // Call OnFall event
-                m_OnFall.Invoke(m_FallingTime);
+                m_JumpEvents.OnFall.Invoke(m_FallingTime);
 
                 // Update velocity (apply gravity)
                 m_YVelocity += Physics.gravity.y * m_GravityScale * _DeltaTime;
@@ -513,7 +554,7 @@ public class PlatformerController : MonoBehaviour
                 m_JumpTime = 0f;
                 m_JumpInitialPosition = transform.position;
                 m_YVelocity = 1f;
-                m_OnBeginJump.Invoke(new JumpInfos { jumpOrigin = m_JumpInitialPosition, movement = m_LastMovementAxis });
+                m_JumpEvents.OnBeginJump.Invoke(new JumpInfos { jumpOrigin = m_JumpInitialPosition, movement = m_LastMovementAxis });
             }
         }
     }
@@ -527,8 +568,8 @@ public class PlatformerController : MonoBehaviour
         {
             m_IsJumping = false;
             m_YVelocity = 0f;
-            m_OnUpdateJump.Invoke(new JumpUpdateInfos { jumpOrigin = m_JumpInitialPosition, jumpRatio = JumpRatio, jumpTime = m_JumpTime });
-            m_OnStopJump.Invoke();
+            m_JumpEvents.OnUpdateJump.Invoke(new JumpUpdateInfos { jumpOrigin = m_JumpInitialPosition, jumpRatio = JumpRatio, jumpTime = m_JumpTime });
+            m_JumpEvents.OnStopJump.Invoke();
         }
     }
 
@@ -548,6 +589,55 @@ public class PlatformerController : MonoBehaviour
     private void EndJump(InputAction.CallbackContext _Context)
     {
         m_IsJumpInputPressed = false;
+    }
+
+    /// <summary>
+    /// Called when the player press the Jump button and the Jump action begins to apply
+    /// </summary>
+    public JumpInfosEvent OnBeginJump
+    {
+        get { return m_JumpEvents.OnBeginJump; }
+    }
+
+    /// <summary>
+    /// Called each frame the character is ascending after a Jump
+    /// </summary>
+    public JumpUpdateInfosEvent OnUpdateJump
+    {
+        get { return m_JumpEvents.OnUpdateJump; }
+    }
+
+    /// <summary>
+    /// Called when the character stops jumping by releasing the Jump button (if Hold Input Mode enabled), by encountering an obstacle
+    /// above him, or by completing the Jump curve
+    /// </summary>
+    public UnityEvent OnStopJump
+    {
+        get { return m_JumpEvents.OnStopJump; }
+    }
+
+    /// <summary>
+    /// Called when the character lands on the floor after falling down
+    /// </summary>
+    public LandingInfosEvent OnLand
+    {
+        get { return m_JumpEvents.OnLand; }
+    }
+
+    /// <summary>
+    /// Called when the character hit something above him. Sends the hit position.
+    /// </summary>
+    public Vector3Event OnHitCeiling
+    {
+        get { return m_JumpEvents.OnHitCeiling; }
+    }
+
+    /// <summary>
+    /// Called when the character is falling down
+    /// </summary>
+    public FloatEvent OnFall
+    {
+        get { return m_JumpEvents.OnFall; }
     }
 
     #endregion

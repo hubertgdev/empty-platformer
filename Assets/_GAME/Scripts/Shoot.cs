@@ -10,13 +10,31 @@ using UnityEngine.InputSystem;
 public class Shoot : MonoBehaviour
 {
 
-    #region Properties
+    #region Enums & Subclasses
 
     public enum EShootAim
     {
         TransformRight,
         AimWithMouse
     }
+
+    [System.Serializable]
+    private class ShootEvents
+    {
+        // Called when the character shoots (even if no target is hit)
+        public ShootInfosEvent OnShoot = new ShootInfosEvent();
+
+        // Called when the aiming vector changes
+        public AimInfosEvent OnUpdateAim = new AimInfosEvent();
+
+        // Called when a target is hit
+        public HitInfosEvent OnHitTarget = new HitInfosEvent();
+    }
+
+    #endregion
+
+
+    #region Properties
 
     private const string DEFAULT_SHOOT_BINDING = "<Mouse>/leftButton";
     private const string DEFAULT_AIM_POSITION_BINDING = "<Mouse>/position";
@@ -54,17 +72,8 @@ public class Shoot : MonoBehaviour
 
     [Header("Events")]
 
-    // Called when the character shoots (even if no target is hit)
     [SerializeField]
-    private ShootInfosEvent m_OnShoot = new ShootInfosEvent();
-
-    // Called when the aiming vector changes
-    [SerializeField]
-    private AimInfosEvent m_OnUpdateAim = new AimInfosEvent();
-
-    // Called when a target is hit
-    [SerializeField]
-    private HitInfosEvent m_OnHitTarget = new HitInfosEvent();
+    private ShootEvents m_ShootEvents = new ShootEvents();
 
     #if UNITY_EDITOR
 
@@ -152,7 +161,7 @@ public class Shoot : MonoBehaviour
         // Start the cooldown coroutine
         m_ShootCooldownCoroutine = StartCoroutine(ApplyShootCooldown(m_ShootRange, m_ShootCooldown));
         // Call OnShoot event
-        m_OnShoot.Invoke(new ShootInfos
+        m_ShootEvents.OnShoot.Invoke(new ShootInfos
         {
             origin = transform.position,
             direction = aimVector,
@@ -174,7 +183,7 @@ public class Shoot : MonoBehaviour
             };
 
             // Call OnHitTarget event
-            m_OnHitTarget.Invoke(infos);
+            m_ShootEvents.OnHitTarget.Invoke(infos);
 
             // Notify the target being hit
             Shootable shootable = rayHit.collider.GetComponent<Shootable>();
@@ -263,6 +272,30 @@ public class Shoot : MonoBehaviour
         set { m_FreezeShoot = value; }
     }
 
+    /// <summary>
+    /// Called when the character shoots (even if no target is hit)
+    /// </summary>
+    public ShootInfosEvent OnShoot
+    {
+        get { return m_ShootEvents.OnShoot; }
+    }
+
+    /// <summary>
+    /// Called when the aiming vector changes
+    /// </summary>
+    public AimInfosEvent OnUpdateAim
+    {
+        get { return m_ShootEvents.OnUpdateAim; }
+    }
+
+    /// <summary>
+    /// Called when a target is hit
+    /// </summary>
+    public HitInfosEvent OnHitTarget
+    {
+        get { return m_ShootEvents.OnHitTarget; }
+    }
+
     #endregion
 
 
@@ -301,7 +334,7 @@ public class Shoot : MonoBehaviour
         Vector3 aimVector = AimVector.normalized;
         if(aimVector != m_LastAimVector)
         {
-            m_OnUpdateAim.Invoke(new AimInfos
+            m_ShootEvents.OnUpdateAim.Invoke(new AimInfos
             {
                 origin = transform.position,
                 direction = aimVector,

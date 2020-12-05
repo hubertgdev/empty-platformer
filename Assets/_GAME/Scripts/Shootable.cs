@@ -15,4 +15,9 @@ public class Shootable : MonoBehaviour
         m_OnShot.Invoke(_HitInfos);
     }
 
+    public HitInfosEvent OnShot
+    {
+        get { return m_OnShot; }
+    }
+
 }

@@ -294,146 +294,148 @@ MonoBehaviour:
   m_FreezeController: 0
   m_FreezeMovement: 0
   m_FreezeJump: 0
-  m_OnBeginMove:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player begins to move
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnUpdateMove:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Playerr is moving
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnStopMove:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player stops moving
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnChangeOrientation:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player changes its orientation
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnBeginJump:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player begins to jump
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnUpdateJump:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player is jumping
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnStopJump:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player stops jumping
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnLand:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player is landing (stops falling)
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnHitCeiling:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player hits something above
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnFall:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player is falling
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_MovementEvents:
+    OnBeginMove:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Players begins to move
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnUpdateMove:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player is moving
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnStopMove:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player stops moving
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnChangeOrientation:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player changes its orientation
+            m_BoolArgument: 0
+          m_CallState: 2
+  m_JumpEvents:
+    OnBeginJump:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player begins to jump
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnUpdateJump:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player is jumping
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnStopJump:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player stops jumping
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnLand:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player is landing (stops falling)
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnHitCeiling:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player hist something above
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnFall:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player is falling
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1582377604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -448,67 +450,68 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MaxNumberOfLives: 3
   m_NumberOfLivesAtStart: 3
-  m_OnLoseLives:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player lose one or more lives
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_MethodName: UpdateHealth
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnDie:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player dies
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7098764881946107000}
-        m_MethodName: Respawn
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1582377604}
-        m_MethodName: ResetHealth
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_HealthEvents:
+    OnLoseLives:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player lose one or more lives
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 0}
+          m_MethodName: UpdateHealth
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnDie:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player dies
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 7098764881946107000}
+          m_MethodName: Respawn
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1582377604}
+          m_MethodName: ResetHealth
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1311515129119189826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -528,62 +531,63 @@ MonoBehaviour:
   m_InvincibilityDuration: 2
   m_Health: {fileID: 1582377604}
   m_Collider: {fileID: 9170928101642006298}
-  m_OnContact:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player contacts something
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnBeginInvincibility:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player becomes invincible
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnUpdateInvincibility:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player is invincible
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnStopInvincibility:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player is no longer invincible
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_ContactDamagesEvents:
+    OnContact:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player contacts something
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnBeginInvincibility:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player becomes invincible
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnUpdateInvincibility:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player is invincible
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnStopInvincibility:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player is no longer invincible
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &7098764881946107000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -740,48 +744,49 @@ MonoBehaviour:
   m_ShootDamages: 1
   m_AimWithMouseZPosition: 0.5
   m_FreezeShoot: 0
-  m_OnShoot:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player shoots
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnUpdateAim:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player's aiming vector changes
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnHitTarget:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
-        m_MethodName: LogMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Player hits a target
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_ShootEvents:
+    OnShoot:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player shoots
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnUpdateAim:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Player's aiming vector changes
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnHitTarget:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: c2b8a67daad933946b08a426acf8642c, type: 2}
+          m_MethodName: LogMessage
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Players hit target
+            m_BoolArgument: 0
+          m_CallState: 2
   m_EnableDebugLines: 1
   m_DebugLineDuration: 2
   m_DrawAimVector: 1

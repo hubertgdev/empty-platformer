@@ -8,6 +8,22 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
 
+    #region Subclasses
+
+    [System.Serializable]
+    private class HealthEvents
+    {
+        // Called when the character lose one or more lives
+        // Sends informations about the number of lives lost and the remaining lives
+        public DamagesInfosEvent OnLoseLives = new DamagesInfosEvent();
+
+        // Called when the character dies (has no remaining lives)
+        public UnityEvent OnDie = new UnityEvent();
+    }
+
+    #endregion
+
+
     #region Properties
 
     [Header("Settings")]
@@ -20,14 +36,8 @@ public class Health : MonoBehaviour
 
     [Header("Events")]
 
-    // Called when the character lose one or more lives
-    // Sends informations about the number of lives lost and the remaining lives
     [SerializeField]
-    private DamagesInfosEvent m_OnLoseLives = new DamagesInfosEvent();
-
-    // Called when the character dies (has no remaining lives)
-    [SerializeField]
-    private UnityEvent m_OnDie = new UnityEvent();
+    private HealthEvents m_HealthEvents = new HealthEvents();
 
     // Number of current remaining lives
     private int m_RemainingLives = 0;
@@ -56,7 +66,7 @@ public class Health : MonoBehaviour
     #endregion
 
 
-    #region Public Methods
+    #region Public API
 
     /// <summary>
     /// Decrease the number of lives by the given amount.
@@ -68,7 +78,7 @@ public class Health : MonoBehaviour
         {
             // Decrease remaining lives, but ensures the new value is not less than 0 lives
             m_RemainingLives = Mathf.Max(0, m_RemainingLives - _Quantity);
-            m_OnLoseLives.Invoke(new DamagesInfos { livesLost = _Quantity, remainingLives = m_RemainingLives });
+            m_HealthEvents.OnLoseLives.Invoke(new DamagesInfos { livesLost = _Quantity, remainingLives = m_RemainingLives });
 
             ApplyDeath();
         }
@@ -112,6 +122,22 @@ public class Health : MonoBehaviour
         get { return m_MaxNumberOfLives; }
     }
 
+    /// <summary>
+    /// Called when the character lose one or more lives. Sends informations about the number of lives lost and the remaining lives.
+    /// </summary>
+    public DamagesInfosEvent OnLoseLives
+    {
+        get { return m_HealthEvents.OnLoseLives; }
+    }
+
+    /// <summary>
+    /// Called when the character dies (has no remaining lives).
+    /// </summary>
+    public UnityEvent OnDie
+    {
+        get { return m_HealthEvents.OnDie; }
+    }
+
     #endregion
 
 
@@ -125,7 +151,7 @@ public class Health : MonoBehaviour
         if(m_RemainingLives <= 0)
         {
             m_RemainingLives = 0;
-            m_OnDie.Invoke();
+            m_HealthEvents.OnDie.Invoke();
         }
     }
 
