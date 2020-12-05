@@ -9,7 +9,7 @@ public class AutoDestroy : MonoBehaviour
 {
 
     [SerializeField]
-    [Tooltip("Defines the time before this GameObject is destroyed.")]
+    [Tooltip("Defines the time (in seconds) before this GameObject is destroyed.")]
     private float m_DestroyDelay = 3f;
 
     private void Start()
