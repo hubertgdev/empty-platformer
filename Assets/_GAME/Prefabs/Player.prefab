@@ -290,7 +290,7 @@ MonoBehaviour:
   m_MinJumpDuration: 0.2
   m_JumpObstaclesDetectionLayer:
     serializedVersion: 2
-    m_Bits: 311
+    m_Bits: 24576
   m_FreezeController: 0
   m_FreezeMovement: 0
   m_FreezeJump: 0
@@ -740,7 +740,7 @@ MonoBehaviour:
   m_ShootCooldown: 0.3
   m_ShootableObjectsLayer:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 26624
   m_ShootDamages: 1
   m_AimWithMouseZPosition: 0.5
   m_FreezeShoot: 0
