@@ -54,7 +54,7 @@ The score is increased each time an enemy is killed or a collectible is get.
 - [Overwhelm](https://www.youtube.com/watch?v=yto8PGUWf8U)
 - [Syntetik](https://www.youtube.com/watch?v=v5-EYFkf-KU)
 
-## Other references
+## Other references
 
 - [*Juice It Or Lose It* by Martin Jonasson & Petri Purho](https://www.youtube.com/watch?v=Fy0aCDmgnxg)
 - [*The Art of Screenshake* by Jan Willem Nijman](https://www.youtube.com/watch?v=AJdEqssNZ-U)
