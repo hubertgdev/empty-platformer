@@ -4,6 +4,7 @@ using UnityEngine.Events;
 ///<summary>
 /// Represents a collectioble item.
 ///</summary>
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/collectible.md")]
 public class Collectible : MonoBehaviour
 {
 

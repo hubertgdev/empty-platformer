@@ -3,6 +3,7 @@
 ///<summary>
 /// Represents an object that can respawn after dying.
 ///</summary>
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/respawner.md")]
 public class Respawner : MonoBehaviour
 {
 

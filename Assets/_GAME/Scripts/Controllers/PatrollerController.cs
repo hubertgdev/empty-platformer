@@ -5,6 +5,7 @@
 /// This character will go toward its target, then go back, continuously.
 /// Note that the transform.right vector of this object is its current direction.
 ///</summary>
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/patroller-controller.md")]
 public class PatrollerController : MonoBehaviour
 {
 

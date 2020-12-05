@@ -5,6 +5,7 @@
 /// For example, this asset can be useful for logging informations from UnityEvents.
 ///</summary>
 [CreateAssetMenu(fileName = "NewLogger", menuName = "Utility/Logger")]
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/logger.md")]
 public class Logger : ScriptableObject
 {
 

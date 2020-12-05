@@ -4,6 +4,7 @@ using UnityEngine.Events;
 ///<summary>
 /// Represents a shootable object (catches Shoot action result).
 ///</summary>
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/shootable.md")]
 public class Shootable : MonoBehaviour
 {
 

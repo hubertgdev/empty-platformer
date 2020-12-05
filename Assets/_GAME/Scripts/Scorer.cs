@@ -3,6 +3,7 @@
 ///<summary>
 /// 
 ///</summary>
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/scorer.md")]
 public class Scorer : MonoBehaviour
 {
 

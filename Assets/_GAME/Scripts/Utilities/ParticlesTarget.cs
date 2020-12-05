@@ -3,7 +3,7 @@
 ///<summary>
 /// 
 ///</summary>
-//[AddComponentMenu("Scripts/ParticlesTarget")]
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/particles-target.md")]
 public class ParticlesTarget : MonoBehaviour
 {
 

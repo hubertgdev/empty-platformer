@@ -12,6 +12,7 @@ using UnityEngine.InputSystem;
 ///     - "Horizontal" (axis): Used to control movement on the X axis
 ///     - "Jump" (button): Used to perform Jump action
 ///</summary>
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/platformer-controller.md")]
 public class PlatformerController : MonoBehaviour
 {
 

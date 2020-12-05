@@ -4,6 +4,7 @@ using UnityEngine.Events;
 ///<summary>
 /// Represents the capacity of an object to take damages by touching another entity.
 ///</summary>
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/contact-damages.md")]
 public class ContactDamages : MonoBehaviour
 {
 

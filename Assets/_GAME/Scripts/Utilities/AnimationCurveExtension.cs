@@ -3,6 +3,7 @@
 ///<summary>
 /// Extensions for UnityEngine.Rect struct.
 ///</summary>
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/animation-curve-extension.md")]
 public static class AnimationCurveExtension
 {
 

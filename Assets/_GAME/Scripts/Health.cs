@@ -5,6 +5,7 @@ using UnityEngine.Events;
 /// Represents the health (as number of lives) of a character.
 /// Adding this component to an object means it can take damages and die.
 ///</summary>
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/health.md")]
 public class Health : MonoBehaviour
 {
 

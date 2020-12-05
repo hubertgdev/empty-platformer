@@ -3,6 +3,7 @@
 ///<summary>
 /// Represents a character that can give score when shot.
 ///</summary>
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/shot-score.md")]
 public class ShotScore : MonoBehaviour
 {
 

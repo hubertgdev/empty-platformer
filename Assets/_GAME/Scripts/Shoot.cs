@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 ///<summary>
 /// 
 ///</summary>
-//[AddComponentMenu("Scripts/Shoot")]
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/shoot.md")]
 public class Shoot : MonoBehaviour
 {
 

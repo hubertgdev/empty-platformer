@@ -4,6 +4,7 @@ using UnityEngine.UI;
 ///<summary>
 /// 
 ///</summary>
+[HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/exampe-ui.md")]
 public class ExampleUI : MonoBehaviour
 {
 
