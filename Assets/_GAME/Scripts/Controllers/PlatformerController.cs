@@ -1,7 +1,6 @@
-﻿using System.Collections;
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 ///<summary>
 /// A Platformer Controller for a playable character in a side-scrolling platformer.
@@ -23,7 +22,17 @@ public class PlatformerController : MonoBehaviour
     // Offset used for Jump obstacles detection (see UpdateJump() method)
     private const float JUMP_OBSTACLES_DETECTION_OFFSET = 1f;
 
+    private const string DEFAULT_JUMP_BINDING = "<Keyboard>/space";
+
     /***** Settings *****/
+
+    [Header("Controls")]
+
+    [SerializeField]
+    private InputAction m_MoveXAction = new InputAction("Move X", InputActionType.Value, null, null, null, "Axis");
+
+    [SerializeField]
+    private InputAction m_JumpAction = new InputAction("Jump", InputActionType.Button, DEFAULT_JUMP_BINDING, null, null, "Axis");
 
     [Header("Movement Settings")]
 
@@ -120,6 +129,9 @@ public class PlatformerController : MonoBehaviour
     // The last movement input axis, helpful for checking if the player moved or not
     private float m_LastMovementAxis = 0f;
 
+    // Stores the expected movement direction from user inputs.
+    private float m_MovementDirectionX = 0f;
+
     /***** Jump properties *****/
 
     // Defines if the character is currently on the floor. Useful for triggering OnLand event the first frame that character touches the ground
@@ -139,6 +151,9 @@ public class PlatformerController : MonoBehaviour
 
     // Defines from how much time the character is falling
     private float m_FallingTime = 0f;
+
+    // Stores the state of the jump input button.
+    private bool m_IsJumpInputPressed = false;
 
     /***** Debug properties *****/
 
@@ -175,6 +190,22 @@ public class PlatformerController : MonoBehaviour
         UpdateJump(Time.deltaTime);
     }
 
+    /// <summary>
+    /// Called when this object is enabled.
+    /// </summary>
+    private void OnEnable()
+    {
+        BindControls(true);
+    }
+
+    /// <summary>
+    /// Called when this object is disabled.
+    /// </summary>
+    private void OnDisable()
+    {
+        BindControls(false);
+    }
+
     #endregion
 
 
@@ -196,8 +227,7 @@ public class PlatformerController : MonoBehaviour
         if(m_FreezeMovement || m_FreezeController) { return; }
 
         // Get the movement input
-        float hMovement = Input.GetAxis("Horizontal");
-        Vector3 movement = Vector3.right * hMovement;
+        Vector3 movement = Vector3.right * m_MovementDirectionX;
 
         // Apply movement
         Move(movement, _DeltaTime);
@@ -289,6 +319,24 @@ public class PlatformerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the X movement direction.
+    /// </summary>
+    /// <param name="_Context">The current input context, from the InputAction delegate binding.</param>
+    private void SetMoveDirectionX(InputAction.CallbackContext _Context)
+    {
+        m_MovementDirectionX = Mathf.Clamp(m_MovementDirectionX + _Context.ReadValue<float>(), -1f, 1f);
+    }
+
+    /// <summary>
+    /// Reset the X movement direction to 0.
+    /// </summary>
+    /// <param name="_Context">The current input context, from the InputAction delegate binding.</param>
+    private void ResetMoveDirectionX(InputAction.CallbackContext _Context)
+    {
+        m_MovementDirectionX = 0f;
+    }
+
     #endregion
 
 
@@ -337,7 +385,7 @@ public class PlatformerController : MonoBehaviour
         if (m_IsJumping)
         {
             // If Hold Input Mode option is enabled, but the Jump button is released
-            if(m_HoldInputMode && !Input.GetButton("Jump"))
+            if(m_HoldInputMode && !m_IsJumpInputPressed)
             {
                 // Ensures the minimum Jump duration is less than the Jump curve duration
                 float minDuration = Mathf.Min(m_MinJumpDuration, m_JumpCurve.ComputeDuration());
@@ -457,7 +505,7 @@ public class PlatformerController : MonoBehaviour
             }
 
             // If the character is on the floor (and so it can jump) and player is pressing Jump button
-            if (m_IsOnFloor && Input.GetButtonDown("Jump"))
+            if (m_IsOnFloor && m_IsJumpInputPressed)
             {
                 // Begin Jump action
                 m_IsOnFloor = false;
@@ -482,6 +530,24 @@ public class PlatformerController : MonoBehaviour
             m_OnUpdateJump.Invoke(new JumpUpdateInfos { jumpOrigin = m_JumpInitialPosition, jumpRatio = JumpRatio, jumpTime = m_JumpTime });
             m_OnStopJump.Invoke();
         }
+    }
+
+    /// <summary>
+    /// Makes the character starts jumping.
+    /// </summary>
+    /// <param name="_Context">The current input context, from the InputAction delegate binding.</param>
+    private void BeginJump(InputAction.CallbackContext _Context)
+    {
+        m_IsJumpInputPressed = true;
+    }
+
+    /// <summary>
+    /// Makes the character ends jumping.
+    /// </summary>
+    /// <param name="_Context">The current input context, from the InputAction delegate binding.</param>
+    private void EndJump(InputAction.CallbackContext _Context)
+    {
+        m_IsJumpInputPressed = false;
     }
 
     #endregion
@@ -580,9 +646,42 @@ public class PlatformerController : MonoBehaviour
     #endregion
 
 
+    #region Private Methods
+
+    /// <summary>
+    /// Binds actions to the user inputs.
+    /// </summary>
+    /// <param name="_Bind">If false, unbind actions.</param>
+    private void BindControls(bool _Bind = true)
+    {
+        if (_Bind)
+        {
+            m_MoveXAction.performed += SetMoveDirectionX;
+            m_MoveXAction.canceled += ResetMoveDirectionX;
+            m_JumpAction.started += BeginJump;
+            m_JumpAction.canceled += EndJump;
+
+            m_MoveXAction.Enable();
+            m_JumpAction.Enable();
+        }
+        else
+        {
+            m_MoveXAction.performed -= SetMoveDirectionX;
+            m_MoveXAction.canceled -= ResetMoveDirectionX;
+            m_JumpAction.started -= BeginJump;
+            m_JumpAction.canceled -= EndJump;
+
+            m_MoveXAction.Disable();
+            m_JumpAction.Disable();
+        }
+    }
+
+    #endregion
+
+
     #region Debug & Tests
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
 
     /// <summary>
     /// Draws Gizmos for this component in the Scene View.

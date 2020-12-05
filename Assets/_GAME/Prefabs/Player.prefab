@@ -80,6 +80,182 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64838284b09d8b842b4f2912440567e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_MoveXAction:
+    m_Name: Move X
+    m_Type: 0
+    m_ExpectedControlType: Axis
+    m_Id: b255486e-ce85-4de2-8bd9-062768696fed
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: Arrows [Keyboard]
+      m_Id: ec953c95-9647-4ee0-9643-d1ad5ebb4ca0
+      m_Path: 1DAxis
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move X
+      m_Flags: 4
+    - m_Name: negative
+      m_Id: 24249fe9-a823-46f6-bbd0-e02d6935b114
+      m_Path: <Keyboard>/leftArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move X
+      m_Flags: 8
+    - m_Name: positive
+      m_Id: 068fae82-e03e-410a-b9a5-43a47ec9797b
+      m_Path: <Keyboard>/rightArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move X
+      m_Flags: 8
+    - m_Name: AD [Keyboard]
+      m_Id: f1b6cd0e-a9f6-4fa8-b091-6cbf74f80770
+      m_Path: 1DAxis
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move X
+      m_Flags: 4
+    - m_Name: K; [Keyboard]
+      m_Id: 17327c19-8944-4eb0-b730-d210e885c5fc
+      m_Path: 1DAxis
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move X
+      m_Flags: 4
+    - m_Name: negative
+      m_Id: 5746c0f0-9680-4f3b-837c-8520fa831251
+      m_Path: <Keyboard>/k
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move X
+      m_Flags: 8
+    - m_Name: positive
+      m_Id: 95d02f53-523f-414f-bfff-5233accd0624
+      m_Path: <Keyboard>/semicolon
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move X
+      m_Flags: 8
+    - m_Name: negative
+      m_Id: f58ac169-72f8-44b6-9ab2-7798e58c6ceb
+      m_Path: <Keyboard>/a
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move X
+      m_Flags: 8
+    - m_Name: positive
+      m_Id: e178ead3-7d50-4439-a0bc-2af7ec96242d
+      m_Path: <Keyboard>/d
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move X
+      m_Flags: 8
+    - m_Name: 
+      m_Id: ffdcd6f0-072b-4daa-8cbb-c9ccc1082045
+      m_Path: <Gamepad>/dpad/x
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move X
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 0bb1ad4e-a28b-42fb-a6e2-afe702670963
+      m_Path: <Gamepad>/leftStick/x
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move X
+      m_Flags: 0
+  m_JumpAction:
+    m_Name: Jump
+    m_Type: 1
+    m_ExpectedControlType: Axis
+    m_Id: 947097a2-87fe-4664-8d4a-c38d90d0512c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: c1d5d97a-0660-4e29-875d-e27580fab384
+      m_Path: <Keyboard>/space
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Jump
+      m_Flags: 0
+    - m_Name: 
+      m_Id: b7e35344-9d42-4105-a0c4-4028846fcd7c
+      m_Path: <Keyboard>/w
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Jump
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 52159fd3-0c2f-4cc8-b33c-64153c8c5f43
+      m_Path: <Keyboard>/upArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Jump
+      m_Flags: 0
+    - m_Name: 
+      m_Id: fa8a9096-ba92-4512-a044-26272d39e0b9
+      m_Path: <Mouse>/middleButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Jump
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 665913b6-2597-4043-8500-4b676d977a5d
+      m_Path: <Keyboard>/shift
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Jump
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 471a8c99-186c-45cf-a862-486a7b315698
+      m_Path: <Gamepad>/buttonNorth
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Jump
+      m_Flags: 0
+    - m_Name: 
+      m_Id: a6f65de6-3105-4237-9ddb-af64bb163e58
+      m_Path: <Gamepad>/buttonSouth
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Jump
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 3cba8ba0-7a75-467c-b10c-2c7c34e8f1c9
+      m_Path: <Gamepad>/leftStickPress
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Jump
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 872a96d3-1cee-4074-842d-ac3a5b9d646f
+      m_Path: <Gamepad>/rightStickPress
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Jump
+      m_Flags: 0
   m_Speed: 8
   m_MovementObstaclesDetectionLayer:
     serializedVersion: 2
@@ -286,6 +462,17 @@ MonoBehaviour:
           m_StringArgument: Player lose one or more lives
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_MethodName: UpdateHealth
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnDie:
     m_PersistentCalls:
       m_Calls:
@@ -425,6 +612,17 @@ MonoBehaviour:
           m_StringArgument: Player respawns
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_MethodName: UpdateHealth
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1582377604}
+          m_ObjectArgumentAssemblyTypeName: Health, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1643708231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -437,6 +635,102 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39944770f872a42fe8268c16d1568d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ShootAction:
+    m_Name: Shoot
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 28d37197-3635-448d-969e-21449dc2f582
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 05006062-9383-4da8-8210-f92496e12b8f
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 471d06b0-fac4-4ca1-a056-505af8ccd86d
+      m_Path: <Mouse>/rightButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 97434de2-a3ce-44e2-b955-57294adc38c4
+      m_Path: <Keyboard>/ctrl
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 77fe2762-638b-4957-8aa0-79962a568acf
+      m_Path: <Gamepad>/buttonEast
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 856fbedc-aa50-4a1f-ad4e-7bb35b46a713
+      m_Path: <Gamepad>/buttonWest
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 6d6a54b5-64e8-4a72-8369-9c35aa4199b2
+      m_Path: <Gamepad>/leftShoulder
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 0f20753f-6a7a-4fe8-a41f-3b7fdf6d898c
+      m_Path: <Gamepad>/leftTrigger
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 1423c361-fd82-4862-8524-ef50d1d732b6
+      m_Path: <Gamepad>/rightShoulder
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 1e24a144-9908-4dbe-bcd1-319657c40a39
+      m_Path: <Gamepad>/rightTrigger
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot
+      m_Flags: 0
+  m_AimPositionAction:
+    m_Name: Aim Position
+    m_Type: 0
+    m_ExpectedControlType: Vector2
+    m_Id: 5bb83cf5-c0e9-4ac3-b6de-e85fb79bd31c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: e7510f00-a1d1-4790-9779-2533abbdc1c4
+      m_Path: <Mouse>/position
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Aim Position
+      m_Flags: 0
   m_AimingType: 1
   m_ShootRange: 10
   m_ShootCooldown: 0.3
@@ -518,6 +812,17 @@ MonoBehaviour:
           m_StringArgument: Player scores
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_MethodName: UpdateScore
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1973311649242733723
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,6 +877,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -583,6 +889,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

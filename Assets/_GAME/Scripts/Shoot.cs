@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 ///<summary>
 /// 
@@ -16,6 +17,17 @@ public class Shoot : MonoBehaviour
         TransformRight,
         AimWithMouse
     }
+
+    private const string DEFAULT_SHOOT_BINDING = "<Mouse>/leftButton";
+    private const string DEFAULT_AIM_POSITION_BINDING = "<Mouse>/position";
+
+    [Header("Controls")]
+
+    [SerializeField]
+    private InputAction m_ShootAction = new InputAction("Shoot", InputActionType.Button, DEFAULT_SHOOT_BINDING);
+
+    [SerializeField]
+    private InputAction m_AimPositionAction = new InputAction("AimPosition", InputActionType.Value, DEFAULT_AIM_POSITION_BINDING, null, null, "Vector2");
 
     [Header("Settings")]
 
@@ -75,6 +87,7 @@ public class Shoot : MonoBehaviour
     // The current cooldown coroutine
     private Coroutine m_ShootCooldownCoroutine = null;
 
+    private Vector2 m_AimPosition = Vector2.zero;
     private Vector3 m_LastAimVector = Vector3.zero;
 
     private Scorer m_Scorer = null;
@@ -92,6 +105,23 @@ public class Shoot : MonoBehaviour
         if (m_Scorer == null) { m_Scorer = GetComponent<Scorer>(); }
         m_ShootCooldownTimer = m_ShootCooldown;
         m_LastAimVector = AimVector;
+
+    }
+
+    /// <summary>
+    /// Called when this object is enabled.
+    /// </summary>
+    private void OnEnable()
+    {
+        BindControls(true);
+    }
+
+    /// <summary>
+    /// Called when this object is disabled.
+    /// </summary>
+    private void OnDisable()
+    {
+        BindControls(false);
     }
 
     /// <summary>
@@ -100,13 +130,86 @@ public class Shoot : MonoBehaviour
     private void Update()
     {
         UpdateAim();
-        UpdateShoot(Time.deltaTime);
     }
 
     #endregion
 
 
-    #region Public Methods
+    #region Public API
+
+    /// <summary>
+    /// Makes the character shoot.
+    /// If the character is currently shooting (its cooldown is running), the action is cancelled.
+    /// If the hit object has a Shootable component, triggers OnShot event on that component.
+    /// </summary>
+    public void DoShoot()
+    {
+        // If the character is already shooting (its cooldown is running) or the action is frozen, cancel update
+        if (IsShooting || m_FreezeShoot) { return; }
+
+        Vector3 aimVector = AimVector.normalized;
+
+        // Start the cooldown coroutine
+        m_ShootCooldownCoroutine = StartCoroutine(ApplyShootCooldown(m_ShootRange, m_ShootCooldown));
+        // Call OnShoot event
+        m_OnShoot.Invoke(new ShootInfos
+        {
+            origin = transform.position,
+            direction = aimVector,
+            range = m_ShootRange,
+            cooldown = m_ShootCooldown,
+            damages = m_ShootDamages
+        });
+
+        // If the shot hit something
+        if(Physics.Raycast(transform.position, aimVector, out RaycastHit rayHit, m_ShootRange, m_ShootableObjectsLayer))
+        {
+            HitInfos infos = new HitInfos
+            {
+                shooter = gameObject,
+                target = rayHit.collider.gameObject,
+                impact = rayHit.point,
+                distance = rayHit.distance,
+                damages = m_ShootDamages
+            };
+
+            // Call OnHitTarget event
+            m_OnHitTarget.Invoke(infos);
+
+            // Notify the target being hit
+            Shootable shootable = rayHit.collider.GetComponent<Shootable>();
+            if(shootable != null)
+            {
+                shootable.NotifyHit(infos);
+            }
+
+            // If this character can gain score
+            if(m_Scorer != null)
+            {
+                // Get score from the target if possible
+                ShotScore shotScore = rayHit.collider.GetComponent<ShotScore>();
+                if(shotScore != null)
+                {
+                    m_Scorer.GainScore(shotScore.ScoreByShot);
+                }
+            }
+
+            #if UNITY_EDITOR
+            if(m_EnableDebugLines)
+            {
+                Debug.DrawLine(transform.position, transform.position + aimVector * rayHit.distance, Color.red, m_DebugLineDuration);
+            }
+            #endif
+        }
+        #if UNITY_EDITOR
+        else if(m_EnableDebugLines)
+        {
+            Debug.DrawLine(transform.position, transform.position + aimVector * m_ShootRange, Color.red, m_DebugLineDuration);
+        }
+        #endif
+
+        m_LastAimVector = aimVector;
+    }
 
     /// <summary>
     /// Returns the aim vector, depending on the selected aim mode.
@@ -121,10 +224,25 @@ public class Shoot : MonoBehaviour
             }
             else
             {
-                Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector3 point = AimPosition;
                 point.z = m_AimWithMouseZPosition;
                 return point - transform.position;
             }
+        }
+    }
+
+    /// <summary>
+    /// Gets the aim position. If in edit mode, returns the character direction * shoot range.
+    /// </summary>
+    public Vector3 AimPosition
+    {
+        get
+        {
+#if UNITY_EDITOR
+            if (!UnityEditor.EditorApplication.isPlaying)
+                return transform.position + transform.right * m_ShootRange;
+#endif
+            return m_AimPosition;
         }
     }
 
@@ -151,6 +269,30 @@ public class Shoot : MonoBehaviour
     #region Private Methods
 
     /// <summary>
+    /// Binds actions to the user inputs.
+    /// </summary>
+    /// <param name="_Bind">If false, unbind actions.</param>
+    private void BindControls(bool _Bind = true)
+    {
+        if (_Bind)
+        {
+            m_ShootAction.performed += DoShoot;
+            m_AimPositionAction.performed += SetAimPosition;
+
+            m_ShootAction.Enable();
+            m_AimPositionAction.Enable();
+        }
+        else
+        {
+            m_ShootAction.performed -= DoShoot;
+            m_AimPositionAction.performed -= SetAimPosition;
+
+            m_ShootAction.Disable();
+            m_AimPositionAction.Disable();
+        }
+    }
+
+    /// <summary>
     /// CUpdates the aim vector.
     /// Triggers OnUpdateAim if the vector changes
     /// </summary>
@@ -171,80 +313,14 @@ public class Shoot : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates the shoot action.
+    /// Makes the character shoot.
     /// If the character is currently shooting (its cooldown is running), the action is cancelled.
     /// If the hit object has a Shootable component, triggers OnShot event on that component.
     /// </summary>
-    private void UpdateShoot(float _DeltaTime)
+    /// <param name="_Context">The current input context, from the InputAction delegate binding.</param>
+    private void DoShoot(InputAction.CallbackContext _Context)
     {
-        // If the character is already shooting (its cooldown is running) or the action is frozen, cancel update
-        if(IsShooting || m_FreezeShoot) { return; }
-
-        if(Input.GetButton("Shoot"))
-        {
-            Vector3 aimVector = AimVector.normalized;
-
-            // Start the cooldown coroutine
-            m_ShootCooldownCoroutine = StartCoroutine(ApplyShootCooldown(m_ShootRange, m_ShootCooldown));
-            // Call OnShoot event
-            m_OnShoot.Invoke(new ShootInfos
-            {
-                origin = transform.position,
-                direction = aimVector,
-                range = m_ShootRange,
-                cooldown = m_ShootCooldown,
-                damages = m_ShootDamages
-            });
-
-            // If the shot hit something
-            if(Physics.Raycast(transform.position, aimVector, out RaycastHit rayHit, m_ShootRange, m_ShootableObjectsLayer))
-            {
-                HitInfos infos = new HitInfos
-                {
-                    shooter = gameObject,
-                    target = rayHit.collider.gameObject,
-                    impact = rayHit.point,
-                    distance = rayHit.distance,
-                    damages = m_ShootDamages
-                };
-
-                // Call OnHitTarget event
-                m_OnHitTarget.Invoke(infos);
-
-                // Notify the target being hit
-                Shootable shootable = rayHit.collider.GetComponent<Shootable>();
-                if(shootable != null)
-                {
-                    shootable.NotifyHit(infos);
-                }
-
-                // If this character can gain score
-                if(m_Scorer != null)
-                {
-                    // Get score from the target if possible
-                    ShotScore shotScore = rayHit.collider.GetComponent<ShotScore>();
-                    if(shotScore != null)
-                    {
-                        m_Scorer.GainScore(shotScore.ScoreByShot);
-                    }
-                }
-
-                #if UNITY_EDITOR
-                if(m_EnableDebugLines)
-                {
-                    Debug.DrawLine(transform.position, transform.position + aimVector * rayHit.distance, Color.red, m_DebugLineDuration);
-                }
-                #endif
-            }
-            #if UNITY_EDITOR
-            else if(m_EnableDebugLines)
-            {
-                Debug.DrawLine(transform.position, transform.position + aimVector * m_ShootRange, Color.red, m_DebugLineDuration);
-            }
-            #endif
-
-            m_LastAimVector = aimVector;
-        }
+        DoShoot();
     }
 
     /// <summary>
@@ -264,13 +340,21 @@ public class Shoot : MonoBehaviour
         m_ShootCooldownCoroutine = null;
     }
 
+    /// <summary>
+    /// Sets the aim position, using the input context value.
+    /// </summary>
+    /// <param name="_Context">The current input context, from the InputAction delegate binding.</param>
+    private void SetAimPosition(InputAction.CallbackContext _Context)
+    {
+        m_AimPosition = Camera.main.ScreenToWorldPoint(_Context.ReadValue<Vector2>());
+    }
+
     #endregion
 
 
     #region Debug
 
     #if UNITY_EDITOR
-
     private void OnDrawGizmos()
     {
         if(!m_DrawAimVector) { return; }
@@ -280,7 +364,7 @@ public class Shoot : MonoBehaviour
         // Draw mouse pointer position if "aim with mouse" mode enabled
         if (m_AimingType == EShootAim.AimWithMouse)
         {
-            Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 point = AimPosition;
             point.z = m_AimWithMouseZPosition;
 
             Gizmos.DrawWireSphere(point, .5f);
@@ -288,7 +372,6 @@ public class Shoot : MonoBehaviour
         // Draw aim vector
         Gizmos.DrawLine(transform.position, transform.position + AimVector.normalized * m_ShootRange);
     }
-
     #endif
 
     #endregion
