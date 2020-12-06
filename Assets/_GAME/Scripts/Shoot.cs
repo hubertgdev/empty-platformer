@@ -177,6 +177,7 @@ public class Shoot : MonoBehaviour
             {
                 shooter = gameObject,
                 target = rayHit.collider.gameObject,
+                origin = transform.position,
                 impact = rayHit.point,
                 distance = rayHit.distance,
                 damages = m_ShootDamages

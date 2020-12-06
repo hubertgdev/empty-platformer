@@ -43,7 +43,15 @@ The score is increased each time an enemy is killed or a collectible is get.
 
 [=> See the complete documentation of the projects components](./Docs/README.md)
 
-## Reference games
+### Guides
+
+- [How to set player inputs?](./Docs/howto-inputs.md)
+- [How to use events, and react to what happens in the game?](./Docs/howto-events.md)
+- [How to work on this project using Git?](./Docs/howto-git.md)
+
+## References
+
+### Games
 
 - [Celeste](https://www.youtube.com/watch?v=70d9irlxiB4)
 - [Hollow Knight](www.youtube.com/watch?v=UAO2urG23S4)
@@ -54,7 +62,7 @@ The score is increased each time an enemy is killed or a collectible is get.
 - [Overwhelm](https://www.youtube.com/watch?v=yto8PGUWf8U)
 - [Syntetik](https://www.youtube.com/watch?v=v5-EYFkf-KU)
 
-## Other references
+### Talks and other references
 
 - [*Juice It Or Lose It* by Martin Jonasson & Petri Purho](https://www.youtube.com/watch?v=Fy0aCDmgnxg)
 - [*The Art of Screenshake* by Jan Willem Nijman](https://www.youtube.com/watch?v=AJdEqssNZ-U)

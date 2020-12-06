@@ -112,6 +112,51 @@ You can see in this example that we used `OnEnable()` to add the listener, and `
 
 Also note that in order to update the content of the UI, we never use `Update()`: the UI is redrawn only when the event is triggered, instead of being redrawn each frame!
 
+## Practical use case: bind action to `Collectible.OnCollect` event
+
+The following guide will show you how to create a script that dynamically get and use the informations sent by the project's components.
+
+As an example, you can find a component named [`Collectible`](./collectible.md) that represents an object that can be collected by the player. This component has an event named `On Collect` that is triggered when the object is collected by the player. And that event has a specific type, which is `CollectInfos`. This structure is a collection of data that can be used to trigger an appropriate feedback. So, the `On Collect` infos will send these data when it's triggered.
+
+![`Collectible` component inspector](./images/collectible.png)
+
+Here is the implementation of the `CollectInfos` structure:
+
+```cs
+[System.Serializable]
+public struct CollectInfos
+{
+    public int score;
+    public Vector3 position;
+    public GameObject collector;
+}
+```
+
+You can see that when the `On Collect` event is triggered, it sends several data: the amount of score that the collectible offers, the position of the collectible when it's collected, and the `GameObject` that represents the entity that collected it.
+
+You can bind actions to this event just as explained above, but if you want to get and use the data sent in this event, there is an extra step: you'll have to use dynamic parameters.
+
+This is a simple mechanic in Unity, that allow you to bind a method that takes a parameter of the same type of the event to listen.
+
+```cs
+using UnityEngine;
+public class CollectibleLog : MonoBehaviour
+{
+    public Collectible collectible;
+
+    public void OnCollectListener(CollectInfos infos)
+    {
+        Debug.Log("Collectible has been collected at " + infos.position + ", and offered " + infos.score + " points.");
+    }
+}
+```
+
+You can notice in that example component the method `OnCollectListener()` that takes a parameter `infos` of type `CollectInfos`. Back to Unity, if you try to bind the `OnCollectListener()` method to the `On Collect` event, you'll see a *Dynamic CollectInfos* section in the list:
+
+![Events *Dynamic parameters*](./images/unity-events-example-03.png)
+
+This means that Unity will send the event data directly to the method when it's triggered, so you can use these data as expected. If you use this component in the demo scene, you should see the log line when the item is collected!
+
 ## Related links
 
 - [Official `UnityEvent` manual](https://docs.unity3d.com/Manual/UnityEvents.html)

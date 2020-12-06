@@ -2,6 +2,8 @@
 
 WIP :)
 
+![`Health` component inspector](./images/health.png)
+
 ---
 
 [<= Back to summary](./README.md)
