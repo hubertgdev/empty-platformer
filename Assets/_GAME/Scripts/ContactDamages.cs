@@ -33,9 +33,17 @@ public class ContactDamages : MonoBehaviour
 
     #region Properties
 
+    [Header("References")]
+
+    [SerializeField, Tooltip("By default, gets the Health component on this GameObject")]
+    private Health m_Health = null;
+
+    [SerializeField, Tooltip("By default, gets the BoxCollider component on this GameObject")]
+    private BoxCollider m_Collider = null;
+
     [Header("Settings")]
 
-    [SerializeField]
+    [SerializeField, Tooltip("Defines the layer of the objects that can damage this entity")]
     private LayerMask m_DamagingLayer = 0;
 
     [SerializeField, Tooltip("Defines the number of lives to lose when touching a damaging object")]
@@ -43,12 +51,6 @@ public class ContactDamages : MonoBehaviour
 
     [SerializeField, Tooltip("Sets the duration of invincibility after touching a damaging object")]
     private float m_InvincibilityDuration = .4f;
-
-    [SerializeField, Tooltip("By default, gets the Health component on this GameObject")]
-    private Health m_Health = null;
-
-    [SerializeField, Tooltip("By default, gets the BoxCollider component on this GameObject")]
-    private BoxCollider m_Collider = null;
 
     [Header("Events")]
 
@@ -108,7 +110,9 @@ public class ContactDamages : MonoBehaviour
                 shooter = contacts[0].gameObject,
                 target = gameObject,
                 distance = 0f,
-                damages = m_DamagesOnContact
+                damages = m_DamagesOnContact,
+                impact = transform.position,
+                origin = contacts[0].transform.position
             });
 
             // Apply damages

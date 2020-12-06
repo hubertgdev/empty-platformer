@@ -259,7 +259,7 @@ MonoBehaviour:
   m_Speed: 8
   m_MovementObstaclesDetectionLayer:
     serializedVersion: 2
-    m_Bits: 311
+    m_Bits: 24577
   m_Collider: {fileID: 9170928101642006298}
   m_JumpCurve:
     serializedVersion: 2
@@ -290,8 +290,7 @@ MonoBehaviour:
   m_MinJumpDuration: 0.2
   m_JumpObstaclesDetectionLayer:
     serializedVersion: 2
-    m_Bits: 24576
-  m_FreezeController: 0
+    m_Bits: 24577
   m_FreezeMovement: 0
   m_FreezeJump: 0
   m_MovementEvents:
@@ -476,6 +475,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    OnRemainingLivesChange:
+      m_PersistentCalls:
+        m_Calls: []
     OnDie:
       m_PersistentCalls:
         m_Calls:
@@ -524,13 +526,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a6787101939d1c479951dbf1ab0d0c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Health: {fileID: 1582377604}
+  m_Collider: {fileID: 9170928101642006298}
   m_DamagingLayer:
     serializedVersion: 2
     m_Bits: 2048
   m_DamagesOnContact: 1
   m_InvincibilityDuration: 2
-  m_Health: {fileID: 1582377604}
-  m_Collider: {fileID: 9170928101642006298}
   m_ContactDamagesEvents:
     OnContact:
       m_PersistentCalls:
