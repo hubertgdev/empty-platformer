@@ -4,6 +4,8 @@ A platformer made with Unity, with basic mechanics. This repository is for educa
 
 The main goal of this project is to add as much sign and feedbacks as possible to make a very simple platformer with only the basic moves the most insanely pleaseful to play.
 
+![*Empty Platformer* animated demo](./Docs/images/empty-platformer.gif)
+
 ## Rules and allowed moves
 
 ### Player
@@ -78,3 +80,9 @@ The score is increased each time an enemy is killed or a collectible is get.
 ## Future improvements
 
 - Add ability to aim using the gamepad (by default the right stick)
+
+## Feedback
+
+Did you use this project to train on juiciness? Feel free to send me a demo of the result at [hubert.grossin@gmail.com](mailto:hubert.grossin@gmail.com), I sure will enjoy testing it! ;)
+
+For any other suggestion or issue you encounter on this project, please create an issue on this repository!
