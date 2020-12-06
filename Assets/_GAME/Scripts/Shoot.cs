@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 ///<summary>
-/// 
+/// Makes a playable character able to shoot things.
 ///</summary>
 [HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/shoot.md")]
 public class Shoot : MonoBehaviour
@@ -42,9 +42,11 @@ public class Shoot : MonoBehaviour
     [Header("Controls")]
 
     [SerializeField]
+    [Tooltip("Defines the user inputs (using the new Input System) to make the player shoot")]
     private InputAction m_ShootAction = new InputAction("Shoot", InputActionType.Button, DEFAULT_SHOOT_BINDING);
 
     [SerializeField]
+    [Tooltip("Defines the user inputs (using the new Input System) to let the player aim toward a position. Used only if Aiming Type parameter is set to \"Aim With Mouse\"")]
     private InputAction m_AimPositionAction = new InputAction("AimPosition", InputActionType.Value, DEFAULT_AIM_POSITION_BINDING, null, null, "Vector2");
 
     [Header("Settings")]
@@ -58,16 +60,16 @@ public class Shoot : MonoBehaviour
     [SerializeField, Tooltip("Defines the cooldown of the shoot action")]
     private float m_ShootCooldown = .3f;
 
-    [SerializeField, Tooltip("Defines which object can be shot")]
+    [SerializeField, Tooltip("Defines the physics layer of objects that can be shot")]
     private LayerMask m_ShootableObjectsLayer = ~0;
 
     [SerializeField, Tooltip("Defines the number of lives the shoot action inflcts")]
     private int m_ShootDamages = 1;
 
-    [SerializeField, Tooltip("Defines the Z position of the pointer when aiming with mouse (useful for working with 2D)")]
+    [SerializeField, Tooltip("Defines the Z position of the pointer when aiming with mouse")]
     private float m_AimWithMouseZPosition = 0.5f;
 
-    [SerializeField, Tooltip("Freezes the Shoot action")]
+    [SerializeField, Tooltip("If true, disables the Shoot action")]
     private bool m_FreezeShoot = false;
 
     [Header("Events")]
@@ -85,7 +87,7 @@ public class Shoot : MonoBehaviour
     [SerializeField, Tooltip("Defines the lifetime of debug lines if they're enabled")]
     private float m_DebugLineDuration = 2f;
 
-    [SerializeField]
+    [SerializeField, Tooltip("If true, draws a gizmo line that represents the aim vector")]
     private bool m_DrawAimVector = true;
 
     #endif
@@ -186,21 +188,14 @@ public class Shoot : MonoBehaviour
             // Call OnHitTarget event
             m_ShootEvents.OnHitTarget.Invoke(infos);
 
-            // Notify the target being hit
-            Shootable shootable = rayHit.collider.GetComponent<Shootable>();
-            if(shootable != null)
+            if(rayHit.collider.TryGetComponent(out Shootable shootable))
             {
                 shootable.NotifyHit(infos);
-            }
-
-            // If this character can gain score
-            if(m_Scorer != null)
-            {
-                // Get score from the target if possible
-                ShotScore shotScore = rayHit.collider.GetComponent<ShotScore>();
-                if(shotScore != null)
+                // If this character can gain score
+                if (m_Scorer != null && shootable.ScoreByShot != 0)
                 {
-                    m_Scorer.GainScore(shotScore.ScoreByShot);
+                    // Get score from the target if possible
+                    m_Scorer.GainScore(shootable.ScoreByShot);
                 }
             }
 
@@ -282,7 +277,7 @@ public class Shoot : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the aiming vector changes
+    /// Called when the aiming vector changes.
     /// </summary>
     public AimInfosEvent OnUpdateAim
     {
@@ -290,7 +285,7 @@ public class Shoot : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when a target is hit
+    /// Called when a target is hit.
     /// </summary>
     public HitInfosEvent OnHitTarget
     {

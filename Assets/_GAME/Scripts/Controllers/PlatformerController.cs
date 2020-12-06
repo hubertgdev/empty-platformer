@@ -4,13 +4,6 @@ using UnityEngine.InputSystem;
 
 ///<summary>
 /// A Platformer Controller for a playable character in a side-scrolling platformer.
-/// This implements basic actions and throw events as it acts:
-///     - Movement (X axis)
-///     - Jump
-///     
-/// NOTE: You must add two entries in your Input Settings to make it work:
-///     - "Horizontal" (axis): Used to control movement on the X axis
-///     - "Jump" (button): Used to perform Jump action
 ///</summary>
 [HelpURL("https://github.com/DaCookie/empty-platformer/blob/master/Docs/platformer-controller.md")]
 public class PlatformerController : MonoBehaviour
@@ -21,40 +14,39 @@ public class PlatformerController : MonoBehaviour
     [System.Serializable]
     private class MovementEvents
     {
-        // Called when the character starts moving
+        // Called when the character starts moving.
         public MovementInfosEvent OnBeginMove = new MovementInfosEvent();
 
-        // Called each frame the character is moving (even if there's an obstacle in front of it)
+        // Called each frame while the character is moving (even if there's an obstacle in front of it).
         public MovementInfosEvent OnUpdateMove = new MovementInfosEvent();
 
-        // Called when the character stops moving
+        // Called when the character stops moving.
         public UnityEvent OnStopMove = new UnityEvent();
 
-        // Called when the character changes its movment direction
+        // Called when the character changes its movment direction. Sends the new direction vector.
         public Vector3Event OnChangeOrientation = new Vector3Event();
     }
 
     [System.Serializable]
     private class JumpEvents
     {
-        // Called when the player press the Jump button and the Jump action begins to apply
+        // Called when the player press the Jump button and the Jump action begins to apply.
         public JumpInfosEvent OnBeginJump = new JumpInfosEvent();
 
-        // Called each frame the character is ascending after a Jump
+        // Called each frame while the character is ascending after a Jump.
         public JumpUpdateInfosEvent OnUpdateJump = new JumpUpdateInfosEvent();
 
         // Called when the character stops jumping by releasing the Jump button (if Hold Input Mode enabled), by encountering an obstacle above
-        // him, or by completing the Jump curve
+        // him, or by completing the Jump curve.
         public UnityEvent OnStopJump = new UnityEvent();
 
-        // Called when the character lands on the floor after falling down
+        // Called when the character lands on the floor after falling down.
         public LandingInfosEvent OnLand = new LandingInfosEvent();
 
-        // Called when the character hit something above him
-        // Sends the hit position
+        // Called when the character hit something above him. Sends the hit position.
         public Vector3Event OnHitCeiling = new Vector3Event();
 
-        // Called when the character is falling down
+        // Called when the character is falling down.
         public FloatEvent OnFall = new FloatEvent();
     }
 
@@ -75,48 +67,47 @@ public class PlatformerController : MonoBehaviour
     [Header("Controls")]
 
     [SerializeField]
+    [Tooltip("Defines the user inputs (using the new Input System) to make the player move along the X axis")]
     private InputAction m_MoveXAction = new InputAction("Move X", InputActionType.Value, null, null, null, "Axis");
 
     [SerializeField]
+    [Tooltip("Defines the user inputs (using the new Input System) to make the player jump")]
     private InputAction m_JumpAction = new InputAction("Jump", InputActionType.Button, DEFAULT_JUMP_BINDING, null, null, "Axis");
 
     [Header("Movement Settings")]
 
-    [SerializeField, Tooltip("Maximum speed of the character")]
+    [SerializeField, Tooltip("Maximum speed of the character (in units/second)")]
     private float m_Speed = 8f;
 
-    [SerializeField, Tooltip("Defines the layers to check when detecting obstacles on movement")]
+    [SerializeField, Tooltip("Defines the physics layers that can block player movement")]
     private LayerMask m_MovementObstaclesDetectionLayer = ~0;
 
-    [SerializeField, Tooltip("By default, use the Collider on this GameObject")]
+    [SerializeField, Tooltip("Reference to the character's collider. By default, use the Collider on this GameObject")]
     private BoxCollider m_Collider = null;
 
     [Header("Jump Settings")]
 
-    [SerializeField, Tooltip("The Jump path: X axis represents the duration of the jump, Y axis represents the height")]
+    [SerializeField, Tooltip("Defines how the jump should behave, where X represents the duration of the jump and Y axis represents the height")]
     private AnimationCurve m_JumpCurve = new AnimationCurve();
 
     [SerializeField, Tooltip("Defines the falling speed of the character")]
     private float m_GravityScale = 1f;
 
-    [SerializeField, Tooltip("If false, press the Jump button once to run the jump curve completely. If true, the jump curve is read until the Jump button is released or until the curve is complete.")]
+    [SerializeField, Tooltip("If false, press the Jump button once to run the jump curve completely. If true, the jump curve is read until the Jump button is released or until the curve is complete (Super Mario-like jump)")]
     private bool m_HoldInputMode = true;
 
-    [SerializeField, Tooltip("Used only if \"Hold Input Mode\" is set to true. Defines the minimum jump duration.")]
+    [SerializeField, Tooltip("Used only if \"Hold Input Mode\" is set to true. Defines the minimum jump duration when the jump input is pressed for one frame only")]
     private float m_MinJumpDuration = .2f;
 
-    [SerializeField, Tooltip("Defines the layers to check when detecting obstacles on jump")]
+    [SerializeField, Tooltip("Defines the physics layers that can block player jump")]
     private LayerMask m_JumpObstaclesDetectionLayer = ~0;
 
     [Header("Other Settings")]
 
-    [SerializeField, Tooltip("If true, disables movement and jump")]
-    private bool m_FreezeController = false;
-
-    [SerializeField, Tooltip("If true, disables movement input and updates")]
+    [SerializeField, Tooltip("If true, disables movement")]
     private bool m_FreezeMovement = false;
 
-    [SerializeField, Tooltip("If true, disables jump input and updates")]
+    [SerializeField, Tooltip("If true, disables jump")]
     private bool m_FreezeJump = false;
 
     /***** Events *****/
@@ -222,19 +213,12 @@ public class PlatformerController : MonoBehaviour
     #region Movement
 
     /// <summary>
-    /// Checks if the character is moving.
-    /// </summary>
-    public bool IsMoving
-    {
-        get { return m_LastMovementAxis != 0f; }
-    }
-
-    /// <summary>
     /// Checks for the movement inputs, and apply movement if required.
     /// </summary>
     private void UpdateMovement(float _DeltaTime)
     {
-        if(m_FreezeMovement || m_FreezeController) { return; }
+        if(m_FreezeMovement)
+            return;
 
         // Get the movement input
         Vector3 movement = Vector3.right * m_MovementDirectionX;
@@ -305,6 +289,32 @@ public class PlatformerController : MonoBehaviour
     }
 
     /// <summary>
+    /// Sets the X movement direction.
+    /// </summary>
+    /// <param name="_Context">The current input context, from the InputAction delegate binding.</param>
+    private void SetMoveDirectionX(InputAction.CallbackContext _Context)
+    {
+        m_MovementDirectionX = Mathf.Clamp(m_MovementDirectionX + _Context.ReadValue<float>(), -1f, 1f);
+    }
+
+    /// <summary>
+    /// Reset the X movement direction to 0.
+    /// </summary>
+    /// <param name="_Context">The current input context, from the InputAction delegate binding.</param>
+    private void ResetMoveDirectionX(InputAction.CallbackContext _Context)
+    {
+        m_MovementDirectionX = 0f;
+    }
+
+    /// <summary>
+    /// Checks if the character is moving.
+    /// </summary>
+    public bool IsMoving
+    {
+        get { return m_LastMovementAxis != 0f; }
+    }
+
+    /// <summary>
     /// Gets the current orientation of the character.
     /// While the game is a Platformer 2D, its forward vector (its orientation) is transform.right.
     /// 
@@ -330,21 +340,17 @@ public class PlatformerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets the X movement direction.
+    /// Gets the current movement direction vector of the character.
     /// </summary>
-    /// <param name="_Context">The current input context, from the InputAction delegate binding.</param>
-    private void SetMoveDirectionX(InputAction.CallbackContext _Context)
+    public Vector3 MovementDirection
     {
-        m_MovementDirectionX = Mathf.Clamp(m_MovementDirectionX + _Context.ReadValue<float>(), -1f, 1f);
-    }
-
-    /// <summary>
-    /// Reset the X movement direction to 0.
-    /// </summary>
-    /// <param name="_Context">The current input context, from the InputAction delegate binding.</param>
-    private void ResetMoveDirectionX(InputAction.CallbackContext _Context)
-    {
-        m_MovementDirectionX = 0f;
+        get
+        {
+            Vector3 movement = Vector3.zero;
+            movement.y = m_YVelocity == 0 ? 0 : Mathf.Sign(m_YVelocity);
+            movement.x = m_LastMovementAxis;
+            return movement == Vector3.zero ? Vector3.zero : movement.normalized;
+        }
     }
 
     /// <summary>
@@ -385,43 +391,12 @@ public class PlatformerController : MonoBehaviour
     #region Jump
 
     /// <summary>
-    /// Checks if the character is juming.
-    /// </summary>
-    public bool IsJumping
-    {
-        get { return m_IsJumping; }
-    }
-
-    /// <summary>
-    /// Checks if the character is on the floor.
-    /// </summary>
-    public bool IsOnFloor
-    {
-        get { return m_IsOnFloor; }
-    }
-
-    /// <summary>
-    /// Checks if the character is falling (not jumping and not on the floor).
-    /// </summary>
-    public bool IsFalling
-    {
-        get { return !IsJumping && !IsOnFloor; }
-    }
-
-    /// <summary>
-    /// Gets the jump timer ratio, over the jump total duration.
-    /// </summary>
-    public float JumpRatio
-    {
-        get { return (IsJumping) ? m_JumpTime / m_JumpCurve.ComputeDuration() : 1f; }
-    }
-
-    /// <summary>
     /// Checks for the Jump input, and updates the Jump state and the character Y position.
     /// </summary>
     private void UpdateJump(float _DeltaTime)
     {
-        if(m_FreezeJump || m_FreezeController) { return; }
+        if(m_FreezeJump)
+            return;
 
         // If the character is currently jumping
         if (m_IsJumping)
@@ -459,7 +434,6 @@ public class PlatformerController : MonoBehaviour
                 targetPosition.y = m_JumpInitialPosition.y + lastHeight + rayHit.distance;
                 transform.position = targetPosition;
                 m_JumpEvents.OnHitCeiling.Invoke(rayHit.point);
-                StopJump();
             }
             // Else, if there's no obstacle above
             else
@@ -593,7 +567,39 @@ public class PlatformerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the player press the Jump button and the Jump action begins to apply
+    /// Checks if the character is juming.
+    /// </summary>
+    public bool IsJumping
+    {
+        get { return m_IsJumping; }
+    }
+
+    /// <summary>
+    /// Checks if the character is on the floor.
+    /// </summary>
+    public bool IsOnFloor
+    {
+        get { return m_IsOnFloor; }
+    }
+
+    /// <summary>
+    /// Checks if the character is falling (not jumping and not on the floor).
+    /// </summary>
+    public bool IsFalling
+    {
+        get { return !IsJumping && !IsOnFloor; }
+    }
+
+    /// <summary>
+    /// Gets the jump timer ratio, over the jump total duration.
+    /// </summary>
+    public float JumpRatio
+    {
+        get { return (IsJumping) ? m_JumpTime / m_JumpCurve.ComputeDuration() : 1f; }
+    }
+
+    /// <summary>
+    /// Called when the player press the Jump button and the Jump action begins to apply.
     /// </summary>
     public JumpInfosEvent OnBeginJump
     {
@@ -601,7 +607,7 @@ public class PlatformerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Called each frame the character is ascending after a Jump
+    /// Called each frame the character is ascending after a Jump.
     /// </summary>
     public JumpUpdateInfosEvent OnUpdateJump
     {
@@ -610,7 +616,7 @@ public class PlatformerController : MonoBehaviour
 
     /// <summary>
     /// Called when the character stops jumping by releasing the Jump button (if Hold Input Mode enabled), by encountering an obstacle
-    /// above him, or by completing the Jump curve
+    /// above him, or by completing the Jump curve.
     /// </summary>
     public UnityEvent OnStopJump
     {
@@ -618,7 +624,7 @@ public class PlatformerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the character lands on the floor after falling down
+    /// Called when the character lands on the floor after falling down.
     /// </summary>
     public LandingInfosEvent OnLand
     {
@@ -634,7 +640,7 @@ public class PlatformerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the character is falling down
+    /// Called when the character is falling down.
     /// </summary>
     public FloatEvent OnFall
     {
@@ -647,24 +653,29 @@ public class PlatformerController : MonoBehaviour
     #region Common
 
     /// <summary>
-    /// Resets the controller state (cancels jump).
+    /// Resets the controller state (cancels jump and unfreeze actions).
     /// </summary>
     public void ResetController()
     {
         StopJump();
+        FreezeController = false;
     }
 
     /// <summary>
-    /// Freezes all the controller actions.
+    /// Freezes/unfreezes both jump and movement.
     /// </summary>
     public bool FreezeController
     {
-        get { return m_FreezeController; }
-        set { m_FreezeController = value; }
+        get { return m_FreezeMovement && m_FreezeJump; }
+        set
+        {
+            m_FreezeMovement = value;
+            m_FreezeJump = value;
+        }
     }
 
     /// <summary>
-    /// Freezes movement.
+    /// Freezes/unfreezes movement.
     /// </summary>
     public bool FreezeMovement
     {
@@ -673,23 +684,12 @@ public class PlatformerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Freezes jump.
+    /// Freezes/unfreezes jump.
     /// </summary>
     public bool FreezeJump
     {
         get { return m_FreezeJump; }
         set { m_FreezeJump = value; }
-    }
-
-    public Vector3 MovementDirection
-    {
-        get
-        {
-            Vector3 movement = Vector3.zero;
-            movement.y = m_YVelocity == 0 ? 0 : Mathf.Sign(m_YVelocity);
-            movement.x = m_LastMovementAxis;
-            return movement == Vector3.zero ? Vector3.zero : movement.normalized;
-        }
     }
 
     /// <summary>
@@ -724,11 +724,17 @@ public class PlatformerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Gets the Y velocity of the character.
+    /// </summary>
     public float YVelocity
     {
         get { return m_YVelocity; }
     }
 
+    /// <summary>
+    /// Gets the last X movement input axis.
+    /// </summary>
     public float LastMovementAxis
     {
         get { return m_LastMovementAxis; }

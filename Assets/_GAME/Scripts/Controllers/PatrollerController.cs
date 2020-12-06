@@ -20,7 +20,7 @@ public class PatrollerController : MonoBehaviour
 
     #region Properties
 
-    [SerializeField, Tooltip("Defines tyhe speed of the object (in unit per second)")]
+    [SerializeField, Tooltip("Defines the speed of the object (in units/second)")]
     private float m_Speed = 3f;
 
     [SerializeField, Tooltip("Defines the first direction to go")]
@@ -29,7 +29,7 @@ public class PatrollerController : MonoBehaviour
     [SerializeField, Tooltip("Defines the length of the path to follow")]
     private float m_Distance = 9f;
 
-    [SerializeField, Tooltip("Used mostly to draw gizmos, and to get the size of the object")]
+    [SerializeField, Tooltip("Reference to the characters collider. By default, use this GameObject's collider")]
     private Collider m_Collider = null;
 
     [SerializeField, Tooltip("If true, the Patroller is not updated")]

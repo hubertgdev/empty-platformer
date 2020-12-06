@@ -12,9 +12,11 @@ public class Logger : ScriptableObject
     #region Properties
 
     [SerializeField]
+    [Tooltip("The eventual prefix to add to a message that contains a value.")]
     private string m_Prefix = string.Empty;
 
     [SerializeField]
+    [Tooltip("The eventual suffix to add to a message that contains a value.")]
     private string m_Suffix = string.Empty;
 
     #endregion
@@ -23,7 +25,7 @@ public class Logger : ScriptableObject
     #region Static Log Methods
 
     /// <summary>
-    /// Logs the given message.
+    /// Logs the given message. Note that Prefix and Suffix are not used in that case.
     /// </summary>
     public void LogMessage(string _Message)
     {
