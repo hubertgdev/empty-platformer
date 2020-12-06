@@ -69,3 +69,12 @@ The score is increased each time an enemy is killed or a collectible is get.
 - [*Game Feel* by Steve Swink](http://www.game-feel.com)
 - [*How To Prototype a Game in Under 7 Days* by Kyle Gray, Kyle Gabler, Shalin Shodhan & Matt Kucic - Gamasutra](https://www.gamasutra.com/view/feature/2438/how_to_prototype_a_game_in_under_7_.php)
 - https://twitter.com/BsMcInnes/status/1228772415683153920
+
+### Recommended tools
+
+- [DOTween](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676): A complete tweening library to create simple animations through code
+- [Asset Forge](https://assetforge.io): A 3D software to create models in no time
+
+## Future improvements
+
+- Add ability to aim using the gamepad (by default the right stick)

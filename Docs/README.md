@@ -21,7 +21,6 @@ This directory contains full documentation about the project's components, and s
 - [Scorer](./scorer.md)
 - [Shoot](./shoot.md)
 - [Shootable](./shootable.md)
-- [Shot Score](./shot-score.md)
 
 ### Demo components
 
