@@ -434,6 +434,7 @@ public class PlatformerController : MonoBehaviour
                 targetPosition.y = m_JumpInitialPosition.y + lastHeight + rayHit.distance;
                 transform.position = targetPosition;
                 m_JumpEvents.OnHitCeiling.Invoke(rayHit.point);
+                StopJump();
             }
             // Else, if there's no obstacle above
             else
