@@ -12,11 +12,15 @@ public class Logger : ScriptableObject
     #region Properties
 
     [SerializeField]
-    [Tooltip("The eventual prefix to add to a message that contains a value.")]
+    [Tooltip("Defines if the logs from this asset are enabled or not")]
+    private bool m_IsActive = true;
+
+    [SerializeField]
+    [Tooltip("The eventual prefix to add to a message that contains a value")]
     private string m_Prefix = string.Empty;
 
     [SerializeField]
-    [Tooltip("The eventual suffix to add to a message that contains a value.")]
+    [Tooltip("The eventual suffix to add to a message that contains a value")]
     private string m_Suffix = string.Empty;
 
     #endregion
@@ -29,7 +33,8 @@ public class Logger : ScriptableObject
     /// </summary>
     public void LogMessage(string _Message)
     {
-        Debug.Log(_Message);
+        if(m_IsActive)
+            Debug.Log(_Message);
     }
 
     #endregion
@@ -42,7 +47,8 @@ public class Logger : ScriptableObject
     /// </summary>
     public void Log()
     {
-        Debug.Log($"{m_Prefix} {m_Suffix}");
+        if (m_IsActive)
+            Debug.Log($"{m_Prefix} {m_Suffix}");
     }
 
     /// <summary>
@@ -50,7 +56,8 @@ public class Logger : ScriptableObject
     /// </summary>
     public void Log(string _Data)
     {
-        Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
+        if (m_IsActive)
+            Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
     }
 
     /// <summary>
@@ -58,7 +65,8 @@ public class Logger : ScriptableObject
     /// </summary>
     public void Log(int _Data)
     {
-        Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
+        if (m_IsActive)
+            Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
     }
 
     /// <summary>
@@ -66,7 +74,8 @@ public class Logger : ScriptableObject
     /// </summary>
     public void Log(float _Data)
     {
-        Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
+        if (m_IsActive)
+            Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
     }
 
     /// <summary>
@@ -74,7 +83,8 @@ public class Logger : ScriptableObject
     /// </summary>
     public void Log(bool _Data)
     {
-        Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
+        if (m_IsActive)
+            Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
     }
 
     /// <summary>
@@ -82,7 +92,8 @@ public class Logger : ScriptableObject
     /// </summary>
     public void Log(Vector3 _Data)
     {
-        Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
+        if (m_IsActive)
+            Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
     }
 
     /// <summary>
@@ -90,7 +101,8 @@ public class Logger : ScriptableObject
     /// </summary>
     public void Log(Quaternion _Data)
     {
-        Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
+        if (m_IsActive)
+            Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
     }
 
     /// <summary>
@@ -98,7 +110,8 @@ public class Logger : ScriptableObject
     /// </summary>
     public void Log(GameObject _Data)
     {
-        Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
+        if (m_IsActive)
+            Debug.Log($"{m_Prefix} {_Data} {m_Suffix}");
     }
 
     #endregion

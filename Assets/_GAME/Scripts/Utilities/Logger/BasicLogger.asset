@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b91157279d671654b80a22de640a2874, type: 3}
   m_Name: BasicLogger
   m_EditorClassIdentifier: 
+  m_IsActive: 1
   m_Prefix: 
   m_Suffix: 
