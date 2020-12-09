@@ -10,6 +10,7 @@ In the original project, you should be able to find a *BasicLogger* asset, but y
 
 ## Parameters
 
+- **Is Active**: Defines if the logs from this asset are enabled or not.
 - **Prefix**: The eventual prefix to add to a message that contains a value.
 - **Suffix**: The eventual suffix to add to a message that contains a value.
 
