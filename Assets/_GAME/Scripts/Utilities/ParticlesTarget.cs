@@ -7,8 +7,10 @@
 public class ParticlesTarget : MonoBehaviour
 {
 
-	[SerializeField]
-    [Tooltip("The reference to the `Particle System` component affected by this effect")]
+    #region Properties
+
+    [SerializeField]
+    [Tooltip("Reference to the \"Particle System\" component affected by this effect")]
     private ParticleSystem m_ParticleSystem = null;
 
     [SerializeField]
@@ -23,9 +25,14 @@ public class ParticlesTarget : MonoBehaviour
     [Tooltip("Defines the particles before this component affect the particles position. Before this delay, the particles will ask as they normally do from the Particle System")]
     private float m_AffectParticlesDelay = 0f;
 
+    #endregion
+
+
+    #region Lifecycle
+
     private void Awake()
     {
-        if(m_ParticleSystem == null) { m_ParticleSystem = GetComponent<ParticleSystem>(); }
+        if (m_ParticleSystem == null) { m_ParticleSystem = GetComponent<ParticleSystem>(); }
         if (m_ParticleSystem == null)
             Debug.LogWarning("No Particle System set on this Particles Target component");
 
@@ -35,24 +42,72 @@ public class ParticlesTarget : MonoBehaviour
 
     private void Update()
     {
-        if (m_ParticleSystem == null || m_Target == null)
+        if (m_ParticleSystem == null || Target == null)
             return;
 
         ParticleSystem.Particle[] particles = new ParticleSystem.Particle[m_ParticleSystem.particleCount];
         int count = m_ParticleSystem.GetParticles(particles);
-       
+
         for (int i = 0; i < count; i++)
         {
             if (particles[i].startLifetime - particles[i].remainingLifetime >= m_AffectParticlesDelay)
-                particles[i].position = Vector3.Lerp(particles[i].position, Target, m_Lerp);
+                particles[i].position = Vector3.Lerp(particles[i].position, TargetPosition, m_Lerp);
         }
 
         m_ParticleSystem.SetParticles(particles, count);
     }
 
-    private Vector3 Target
+    #endregion
+
+
+    #region Public API
+
+    /// <summary>
+    /// Reference to the "Particle System" component affected by this effect.
+    /// </summary>
+    public ParticleSystem Particles
+    {
+        get { return m_ParticleSystem; }
+        set { m_ParticleSystem = value; }
+    }
+
+    /// <summary>
+    /// The position to which the particles will move.
+    /// </summary>
+    public Transform Target
+    {
+        get { return m_Target != null ? m_Target : transform; }
+        set { m_Target = value; }
+    }
+
+    /// <summary>
+    /// The linear interpolation amount from the current particle position to the target the particles will move along each frame.
+    /// </summary>
+    public float Lerp
+    {
+        get { return m_Lerp; }
+        set { m_Lerp = Mathf.Clamp(value, 0f, 1f); }
+    }
+
+    /// <summary>
+    /// Defines the particles before this component affect the particles position. Before this delay, the particles will ask as they normally do from the Particle System.
+    /// </summary>
+    public float AffectParticlesDelay
+    {
+        get { return m_AffectParticlesDelay; }
+        set { m_AffectParticlesDelay = value; }
+    }
+
+    #endregion
+
+
+    #region Private methods
+
+    private Vector3 TargetPosition
     {
         get { return m_Target != null ? m_Target.position : transform.position; }
     }
+
+    #endregion
 
 }
