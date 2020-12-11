@@ -22,7 +22,7 @@ public class Health : MonoBehaviour
         public IntEvent OnRemainingLivesChange = new IntEvent();
 
         // Called when the character dies (has no remaining lives).
-        public UnityEvent OnDie = new UnityEvent();
+        public DeathInfosEvent OnDie = new DeathInfosEvent();
     }
 
     #endregion
@@ -161,7 +161,7 @@ public class Health : MonoBehaviour
     /// <summary>
     /// Called when the character dies (has no remaining lives).
     /// </summary>
-    public UnityEvent OnDie
+    public DeathInfosEvent OnDie
     {
         get { return m_HealthEvents.OnDie; }
     }
@@ -179,7 +179,7 @@ public class Health : MonoBehaviour
         if(m_RemainingLives <= 0)
         {
             m_RemainingLives = 0;
-            m_HealthEvents.OnDie.Invoke();
+            m_HealthEvents.OnDie.Invoke(new DeathInfos { dead = gameObject, position = transform.position });
         }
     }
 

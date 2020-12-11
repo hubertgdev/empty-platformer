@@ -30,9 +30,20 @@ public struct DamagesInfos
 
 Called when the number of remaining lives changes. Note that this event is called even when that number is increased or decreased. Sends the current number of remaining lives.
 
-### `OnDie`
+### `OnDie` (`DeathInfos`)
 
 Called when the character dies (has no remaining lives).
+
+```cs
+public struct DeathInfos
+{
+    // The entity that has just died.
+    public GameObject dead;
+
+    // The position where the entity died.
+    public Vector3 position;
+}
+```
 
 ## Public API
 
