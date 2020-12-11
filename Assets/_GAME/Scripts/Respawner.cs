@@ -43,7 +43,7 @@ public class Respawner : MonoBehaviour
         Vector3 lastPosition = transform.position;
         transform.position = _Position;
 
-        m_OnRespawn.Invoke(new SpawnInfos { lastPosition = lastPosition, spawnPosition = _Position });
+        m_OnRespawn.Invoke(new SpawnInfos { lastPosition = lastPosition, spawnPosition = _Position, target = gameObject });
     }
 
     /// <summary>
