@@ -18,6 +18,9 @@ Called when this character respawns.
 ```cs
 public struct SpawnInfos
 {
+	// The object that has just respawned.
+	public GameObject target;
+
 	// The position of the character before it respawns.
 	public Vector3 lastPosition;
 
