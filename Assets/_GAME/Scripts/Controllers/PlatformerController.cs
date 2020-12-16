@@ -72,7 +72,7 @@ public class PlatformerController : MonoBehaviour
 
     [SerializeField]
     [Tooltip("Defines the user inputs (using the new Input System) to make the player jump")]
-    private InputAction m_JumpAction = new InputAction("Jump", InputActionType.Button, DEFAULT_JUMP_BINDING, null, null, "Axis");
+    private InputAction m_JumpAction = new InputAction("Jump", InputActionType.Button, DEFAULT_JUMP_BINDING, null, null, null);
 
     [Header("Movement Settings")]
 

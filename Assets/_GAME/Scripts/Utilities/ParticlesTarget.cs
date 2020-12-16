@@ -25,6 +25,10 @@ public class ParticlesTarget : MonoBehaviour
     [Tooltip("Defines the particles before this component affect the particles position. Before this delay, the particles will ask as they normally do from the Particle System")]
     private float m_AffectParticlesDelay = 0f;
 
+    [SerializeField]
+    [Tooltip("If true, sets the referenced Particle System's Simulation Space to World. Note that in Local simulation spaces, the position of the target will be relative to the particle emitter position")]
+    private bool m_ForceWorldSpace = true;
+
     #endregion
 
 
@@ -35,18 +39,15 @@ public class ParticlesTarget : MonoBehaviour
         if (m_ParticleSystem == null) { m_ParticleSystem = GetComponent<ParticleSystem>(); }
         if (m_ParticleSystem == null)
             Debug.LogWarning("No Particle System set on this Particles Target component");
-
-        if (m_Target == null)
-            Debug.LogWarning("No Target set on this Particles Target component");
     }
 
     private void Update()
     {
-        if (m_ParticleSystem == null || Target == null)
+        if (Particles == null || Target == null)
             return;
 
-        ParticleSystem.Particle[] particles = new ParticleSystem.Particle[m_ParticleSystem.particleCount];
-        int count = m_ParticleSystem.GetParticles(particles);
+        ParticleSystem.Particle[] particles = new ParticleSystem.Particle[Particles.particleCount];
+        int count = Particles.GetParticles(particles);
 
         for (int i = 0; i < count; i++)
         {
@@ -54,7 +55,7 @@ public class ParticlesTarget : MonoBehaviour
                 particles[i].position = Vector3.Lerp(particles[i].position, TargetPosition, m_Lerp);
         }
 
-        m_ParticleSystem.SetParticles(particles, count);
+        Particles.SetParticles(particles, count);
     }
 
     #endregion
@@ -67,7 +68,18 @@ public class ParticlesTarget : MonoBehaviour
     /// </summary>
     public ParticleSystem Particles
     {
-        get { return m_ParticleSystem; }
+        get
+        {
+            if(m_ParticleSystem != null && m_ForceWorldSpace)
+            {
+                if(m_ParticleSystem.main.simulationSpace != ParticleSystemSimulationSpace.World)
+                {
+                    ParticleSystem.MainModule settings = m_ParticleSystem.main;
+                    settings.simulationSpace = ParticleSystemSimulationSpace.World;
+                }
+            }
+            return m_ParticleSystem;
+        }
         set { m_ParticleSystem = value; }
     }
 

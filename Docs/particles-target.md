@@ -12,6 +12,7 @@ Modify particles emission shape to move them smoothly to a given target.
 - **Target**: The position to which the particles will move.
 - **Lerp**: The linear interpolation amount from the current particle position to the target the particles will move along each frame.
 - **Affect Particles Delay**: Defines the particles before this component affect the particles position. Before this delay, the particles will ask as they normally do from the Particle System.
+- **Force World Space**: If `true`, sets the referenced Particle System's *Simulation Space*  to *World*. Note that in *Local* simulation spaces, the position of the target will be relative to the particle emitter position. So, to avoid any confusion, enabling this option ensures you that the given ***Target*** is the actual target position of the particles.
 
 ## Public API
 
