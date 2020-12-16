@@ -260,7 +260,7 @@ public class PlatformerController : MonoBehaviour
         if (m_LastMovementAxis == 0f)
         {
             // Call OnBeginMove event
-            m_MovementEvents.OnBeginMove.Invoke(new MovementInfos { speed = m_Speed, lastPosition = lastPosition, currentPosition = targetPosition });
+            m_MovementEvents.OnBeginMove.Invoke(new MovementInfos { speed = m_Speed, lastPosition = lastPosition, currentPosition = targetPosition, orientation = Orientation });
         }
 
         // Process obstacles detection
@@ -280,7 +280,7 @@ public class PlatformerController : MonoBehaviour
         transform.position = targetPosition;
         Orientation = _Direction;
         // Call OnUpdateMove event
-        m_MovementEvents.OnUpdateMove.Invoke(new MovementInfos { speed = m_Speed, lastPosition = lastPosition, currentPosition = targetPosition });
+        m_MovementEvents.OnUpdateMove.Invoke(new MovementInfos { speed = m_Speed, lastPosition = lastPosition, currentPosition = targetPosition, orientation = Orientation });
 
         m_LastMovementAxis = _Direction.x;
 

@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 9031166136147954831}
   m_Layer: 10
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -738,6 +738,8 @@ MonoBehaviour:
       m_Action: Aim Position
       m_Flags: 0
   m_AimingType: 1
+  m_UseMainCameraProjection: 1
+  m_AimingProjection: 0
   m_ShootRange: 10
   m_ShootCooldown: 0.3
   m_ShootableObjectsLayer:
