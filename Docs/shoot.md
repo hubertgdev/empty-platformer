@@ -4,11 +4,27 @@ Makes a playable character able to shoot things.
 
 ![`Shoot` component inspector](./images/shoot.png)
 
+## Aim modes
+
+Depending on the projection of your main camera in the scene, the aiming input won't be processed the same way. By default, the aiming position is computed using [`Camera.ScreenToWorldPoint()`](https://docs.unity3d.com/ScriptReference/Camera.ScreenToWorldPoint.html) if your projection is orthographic, or with [`Camera.ScreenPointToRay()`](https://docs.unity3d.com/ScriptReference/Camera.ScreenPointToRay.html) if your projection is perspective.
+
+You can customize this behavior with the ***Aiming Projection*** parameter in the inspector. You can also automatize how the aim is processed by enabling the ***Use Main Camera Projection*** parameter.
+
+### Using orthographic projection
+
+In the first case, using orthographic projection, the aim point is resolved very easily: since there's no perspective in orthographic mode, the computed world point will basically be the position in the scene of the rendered pixel on the mouse pointer.
+
+### Using perspective projection
+
+In the second case, using perspective projection, the mouse position on the screen is converted in a raycast, on which is applied the perspective. **This means that a collider must handle the cursor**. If the background of your scene is empty, this mode won't work. You can just add a *Quad* 3D object behind your scene, rescale it and disable its renderer, it will be enough. Note that the position or the orientation of the hit objects by the raycast doesn't affect the Z component of the computed aim position, since the **Aim With Mouse Z Position** parameter is used to correct it.
+
 ## Parameters
 
 - **Shoot Action**: Defines the user inputs (using [the new *Input System*](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0)) to make the player shoot.
 - **Aim Position Action**: Defines the user inputs (using [the new *Input System*](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0)) to let the player aim toward a position. Used only if *`Aiming Type`* parameter is set to *Aim With Mouse*.
 - **Aiming Type**: Defines if the player is aiming using the `tranform.right` vector of the object, or using mouse pointer.
+- **Use Main Camera Projection**: If enabled, the ***Aiming Projection*** value is defined by the *Main Camera*'s ***Projection*** setting.
+- **Aiming Projection**: Defines the way that the aiming position is processed. See more in the *Aim modes* section above.
 - **Shoot Range**: Defines the range of the shoot action.
 - **Shoot Cooldown**: Defines the cooldown of the shoot action.
 - **Shootable Objects Layer**: Defines the physics layer of objects that can be shot.

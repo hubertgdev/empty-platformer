@@ -18,6 +18,14 @@ public class Shoot : MonoBehaviour
         AimWithMouse
     }
 
+    public enum EShootProjection
+    {
+        // Simply converts the mouse position into a point in the world
+        Orthographic,
+        // Uses a raycast from the main camera's screen position of the mouse, toward the camera's forward
+        Perspective
+    }
+
     [System.Serializable]
     private class ShootEvents
     {
@@ -54,6 +62,12 @@ public class Shoot : MonoBehaviour
     [SerializeField, Tooltip("Defines if the player is aiming using the tranform.right vector of the object, or using mouse pointer")]
     private EShootAim m_AimingType = EShootAim.TransformRight;
 
+    [SerializeField, Tooltip("If enabled, the Aiming Projection value is defined by the Main Camera's Projection setting")]
+    private bool m_UseMainCameraProjection = true;
+
+    [SerializeField, Tooltip("Defines the way that the aiming position is processed")]
+    private EShootProjection m_AimingProjection = EShootProjection.Orthographic;
+
     [SerializeField, Tooltip("Defines the range of the shoot action")]
     private float m_ShootRange = 10f;
 
@@ -66,7 +80,7 @@ public class Shoot : MonoBehaviour
     [SerializeField, Tooltip("Defines the number of lives the shoot action inflcts")]
     private int m_ShootDamages = 1;
 
-    [SerializeField, Tooltip("Defines the Z position of the pointer when aiming with mouse")]
+    [SerializeField, Tooltip("Defines the Z position of the pointer when aiming with mouse.")]
     private float m_AimWithMouseZPosition = 0.5f;
 
     [SerializeField, Tooltip("If true, disables the Shoot action")]
@@ -375,7 +389,14 @@ public class Shoot : MonoBehaviour
     /// <param name="_Context">The current input context, from the InputAction delegate binding.</param>
     private void SetAimPosition(InputAction.CallbackContext _Context)
     {
-        m_AimPosition = Camera.main.ScreenToWorldPoint(_Context.ReadValue<Vector2>());
+        if(m_UseMainCameraProjection && Camera.main.orthographic || m_AimingProjection == EShootProjection.Orthographic)
+            m_AimPosition = Camera.main.ScreenToWorldPoint(_Context.ReadValue<Vector2>());
+        else
+        {
+            Ray ray = Camera.main.ScreenPointToRay(_Context.ReadValue<Vector2>());
+            if(Physics.Raycast(ray, out RaycastHit hitInfos, Mathf.Infinity))
+                m_AimPosition = hitInfos.point;
+        }
     }
 
     #endregion
