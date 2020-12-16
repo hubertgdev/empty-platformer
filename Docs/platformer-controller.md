@@ -36,6 +36,9 @@ public struct MovementInfos
 
 	// The position of the character after it has moved.
 	public Vector3 currentPosition;
+
+	// The orientation of the character when it has moved.
+	public Vector3 orientation;
 }
 ```
 
@@ -54,6 +57,9 @@ public struct MovementInfos
 
 	// The position of the character after it has moved.
 	public Vector3 currentPosition;
+
+	// The orientation of the character when it has moved.
+	public Vector3 orientation;
 }
 ```
 
