@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 ///<summary>
 /// Represents a patrolling entity.
@@ -9,6 +10,8 @@
 public class PatrollerController : MonoBehaviour
 {
 
+    #region Enums & Subclasses
+
     /// <summary>
     /// Represents the first direction to go.
     /// </summary>
@@ -18,7 +21,23 @@ public class PatrollerController : MonoBehaviour
         Right
     }
 
+    [System.Serializable]
+    private class PatrollerControllerEvents
+    {
+        // Called when the patroller changes its direction (so it arrives at the end of its path).
+        // Sends the new direction vector of the entity.
+        public Vector3Event OnChangeDirection;
+
+        // Called each frame this patroller moves.
+        public MovementInfosEvent OnUpdateMove;
+    }
+
+    #endregion
+
+
     #region Properties
+
+    [Header("Settings")]
 
     [SerializeField, Tooltip("Defines the speed of the object (in units/second)")]
     private float m_Speed = 3f;
@@ -34,6 +53,11 @@ public class PatrollerController : MonoBehaviour
 
     [SerializeField, Tooltip("If true, the Patroller is not updated")]
     private bool m_FreezePatroller = false;
+
+    [Header("Events")]
+
+    [SerializeField]
+    private PatrollerControllerEvents m_MovementEvents = new PatrollerControllerEvents();
 
     // The initial position of the character
     private Vector3 m_Origin = Vector3.zero;
@@ -106,10 +130,21 @@ public class PatrollerController : MonoBehaviour
         if(m_CurrentPathDistance == m_Distance || m_CurrentPathDistance == 0f)
         {
             m_Forward = !m_Forward;
+            m_MovementEvents.OnChangeDirection.Invoke(ForwardVector);
         }
 
+        Vector3 lastPosition = transform.position;
         transform.position = m_Origin + PathVector * m_CurrentPathDistance;
         transform.right = ForwardVector;
+
+        m_MovementEvents.OnUpdateMove.Invoke(new MovementInfos
+        {
+             entity = gameObject,
+             lastPosition = lastPosition,
+             currentPosition = transform.position,
+             orientation = ForwardVector,
+             speed = m_Speed
+        });
     }
 
     /// <summary>
@@ -140,7 +175,24 @@ public class PatrollerController : MonoBehaviour
         get { return (m_PathDirection == EPatrollerPathDirection.Right) ? Vector3.right : Vector3.left; }
     }
 
-    #if UNITY_EDITOR
+    /// <summary>
+    /// Called each frame this patroller moves.
+    /// </summary>
+    public MovementInfosEvent OnUpdateMove
+    {
+        get { return m_MovementEvents.OnUpdateMove; }
+    }
+
+    /// <summary>
+    /// Called when the patroller changes its direction (so it arrives at the end of its path).
+    /// Sends the new direction vector of the entity.
+    /// </summary>
+    public Vector3Event OnChangeDirection
+    {
+        get { return m_MovementEvents.OnChangeDirection; }
+    }
+
+#if UNITY_EDITOR
 
     private void OnDrawGizmos()
     {

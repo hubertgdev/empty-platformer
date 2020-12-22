@@ -6,6 +6,9 @@
 [System.Serializable]
 public struct MovementInfos
 {
+	// The entity that has just moved.
+	public GameObject entity;
+
 	// The current speed of the character.
 	public float speed;
 
